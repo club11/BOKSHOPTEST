@@ -13,6 +13,9 @@ class Author(models.Model):
         verbose_name = "Автор",
         verbose_name_plural = "Авторы" 
 
+    def __str__(self) -> str:
+        return self.author
+
 class Serie(models.Model):
     serie = models.CharField(
         verbose_name='Серия',
@@ -22,6 +25,8 @@ class Serie(models.Model):
         verbose_name = "Серия",
         verbose_name_plural = "Серии" 
 
+    def __str__(self) -> str:
+        return self.serie
 
 class Genre(models.Model):
     genre = models.CharField(
@@ -32,6 +37,8 @@ class Genre(models.Model):
         verbose_name = "Жанр",
         verbose_name_plural = "Жанры" 
 
+    def __str__(self) -> str:
+        return self.genre
 
 class Editor(models.Model):
     editor = models.CharField(
@@ -41,3 +48,6 @@ class Editor(models.Model):
     class Meta:
         verbose_name = "Издательство",
         verbose_name_plural = "Издательства" 
+
+    def __str__(self) -> str:
+        return self.editor
