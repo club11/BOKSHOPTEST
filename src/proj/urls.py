@@ -15,31 +15,35 @@ Including another URLconf
 """
 from unicodedata import name
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-from airplanes import views as airplanes_codes_view
-from directories import views as directories_views
+import carts # для картинок в dev режиме
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('directory/', include('directories.urls', namespace='directories')),               #включаем модуль 'directories.urls' gпод неймингом/пространством имен 'directories'. иерархия urls путем Inclde
+    path('book/', include('books.urls', namespace='books')),
+    path('cart/', include('carts.urls', namespace='carts')), 
+    path('order/', include('orders.urls', namespace='orders')), 
+    path('profiles/', include('profiles.urls', namespace='profiles')), 
+] 
 
-    path('flat/<int:flat_id>/', airplanes_codes_view.flat_detail, name='flat'),
-    path('flats/', airplanes_codes_view.flat_list, name = 'flat_list'),
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    path('author_detail/<int:author_id>/', directories_views.author_detail, name='authors'),
-    path('authors/', directories_views.author_list, name='authors_list'),
+#from airplanes import views as airplanes_codes_view
 
-    path('serie_detail/<int:serie_id>/', directories_views.serie_detail, name='series'),
-    path('series/', directories_views.serie_list, name='series_list'),
+    #path('flat/<int:flat_id>/', airplanes_codes_view.flat_detail, name='flat'),
+    #path('flats/', airplanes_codes_view.flat_list, name = 'flat_list'),
 
-    path('genre_detail/<int:genre_id>/', directories_views.genre_detail, name='genres'),
-    path('genres/', directories_views.genre_list, name='genre_list'),
+    #path('<airport>/', airplanes_codes_view.code_to_airport),
+    #path('', airplanes_codes_view.homepage),
 
-    path('editor_detail/<int:editor_id>/', directories_views.editor_detail, name='editors'),
-    path('editors/', directories_views.editor_list, name='editor_list'),
-
-    path('<airport>/', airplanes_codes_view.code_to_airport),
-    path('', airplanes_codes_view.homepage),
-]
-
-
+#    path('editor_detail/<int:editor_id>/', directories_views.editor_detail, name='editors'),
+#    path('editors/', directories_views.editor_list, name='editor_list'),
+#    path('editor_create/', directories_views.editor_create, name='editor_create'),
+#    path('editor_update/<int:editor_id>', directories_views.editor_update, name='editor_update'),
+#    path('editor_delete/<int:editor_id>', directories_views.editor_delete, name='editor_delete'),

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %} Genre delete {% endblock title %}
+{% block body %} 
+    Удалить жанр?
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock body %}

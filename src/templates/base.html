@@ -1,0 +1,71 @@
+{% load static %}           {# подключать static #}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet"> {# подключать css #}
+    <title>{% block title %} Default title {% endblock title %}</title>
+    <style>
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
+        }
+  
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+        /* Custom page CSS
+        -------------------------------------------------- */
+        /* Not required for template or sticky footer method. */
+
+        main > .container {
+          padding: 60px 15px 0;
+        }
+    </style>
+      
+</head>
+<body class="d-flex flex-column h-100">
+  <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+             {% include './top_menu.html' %}
+              <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+        </nav>
+  </header>
+  <!-- Begin page content -->
+  <main class="flex-shrink-0">
+  <div class="container">
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+  {% block body %} Default body {% endblock body %}
+  </div>
+  </main>
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    <span class="text-muted">sticky footer </span>
+  </div>
+</footer>
+    <script src='{% static "js/bootstrap.bundle.min.js" %}'></script>  {# подключать джаваскрипт #}
+    {% block custom_scripts %}  {% endblock custom_scripts %} {# блок для самопальных скриптов #}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Directories {% endblock title %}
+{% block body %} 
+    <ul>
+        <li><b><a href="{% url 'directories:author_list' %}">Авторы</a></b></li>
+        <li><b><a href="{% url 'directories:genre_list' %}">Жанры</a></b></li>
+        <li><b><a href="{% url 'directories:series_list' %}">Серии</a></b></li>
+        <li><b><a href="{% url 'directories:editor_list' %}">Издатели</a></b></li>
+    </ul>
+{% endblock body %}
+
+
+{#     <ul>                                     #}
+{#    {% for object in list_a %}#}
+{#    <li>{{ object }} </li>#}
+{#    {% endfor %}#}
+{#</ul>#}
+{#<ul>#}
+{#    {% for object in list_b %}#}
+{#    <li>{{ object }} </li>#}
+{#    {% endfor %}#}
+{#</ul> #}

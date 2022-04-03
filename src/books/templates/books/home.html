@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock title %}
+{% block body %}
+<h1>Club11 book shop</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Последние добавленные</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% for object in object_list %}
+      <td>
+        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+          <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="color:#FFFF00"> <b>{{ object.book_name }}</b></h5> 
+            <p class="card-text"> 
+              Автор: <b style="color:#FFFF00">{{ object.author }}</b></br>  
+              Серия: {{ object.serie }}</br>
+              Жанр: {{ object.genre }}</br>
+              Кол-во страниц: <b>{{ object.pages }}</b></br>
+              Формат: {{ object.format }}</br>
+              Количество в наличии: {{ object.value_available }}</br>
+              Доступен для заказа: <b>{{ object.available }}</b></br>
+              Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
+              <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+          </p>
+            <a href="{% url 'books:book' object.pk %}" class="btn btn-primary">Подробнее</a>    
+            <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-primary">В корзину</a>  
+          </div>
+        </div>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+  <thead>
+    <tr>
+      <th scope="col">Рекомедуемые</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% for object in recomended  %}
+      <td>
+        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+          <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="color:#FFFF00"> <b>{{ recomended.book_name }}</b></h5> 
+            <p class="card-text"> 
+              Автор: <b style="color:#FFFF00">{{ object.author }}</b></br>  
+              Серия: {{ object.serie }}</br>
+              Жанр: {{ object.genre }}</br>
+              Кол-во страниц: <b>{{ object.pages }}</b></br>
+              Формат: {{ object.format }}</br>
+              Количество в наличии: {{ object.value_available }}</br>
+              Доступен для заказа: <b>{{ object.available }}</b></br>
+              Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
+              <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+          </p>
+          <a href="{% url 'books:book' object.pk %}" class="btn btn-primary">Подробнее</a>  
+            <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-primary">В корзину</a>  
+          </div>
+        </div>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{% endblock body %}
+

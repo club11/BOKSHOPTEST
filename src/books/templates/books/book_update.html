@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} Book update {% endblock title %}
+{% block body %}
+Редактировать книгу?
+{{ is_valid }}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %} 
+  {{ form.as_p }}
+    <button type="submit" class="btn btn-danger">Редактировать</button>
+</form>
+
+<button type="submit" class="btn btn-light"><a href="{% url 'books:book_list' %}">Назад к списку</a></button>
+{% endblock body %}
+
+
+
+

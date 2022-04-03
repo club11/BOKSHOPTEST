@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Serie list {% endblock title %}
+{% block body %} 
+    <ul>
+    {% for object in serie_list %}
+    <li>{{ forloop.counter }}. <a href="{% url 'directories:serie' object.pk %}"> {{ object }}</a> 
+        <a href="{% url 'directories:serie_update' object.pk %}">Update</a>
+        <a href="{% url 'directories:serie_delete' object.pk %}">Delete</a></li> </li>        {#'series' - is name from  path('sssssserie_detail/<int:serie_id>/', directories_views.serie_detail, name='series'),  some_serie.pk  - object#}
+    {% endfor %}
+    </ul>
+    <button type="submit"><a href="{% url 'directories:serie_create'  %}" >Create</a></button>
+{% endblock body %}
+
+
+{# <li>{{ forloop.counter }}. <a href="/serie_detail/{{ object.pk }}"> {{ some_serie }}</a></li> #}

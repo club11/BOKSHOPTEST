@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock title %}
+{% block body %}
+<b>{{ user }}</b>
+<h1>Регистрация</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class=" btn btn-success">Зарегистрироваться</button>
+</form>
+
+{% endblock body %}
+
+{#  {{ form|crispy }}#}

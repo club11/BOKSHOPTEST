@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %} Editor delete {% endblock title %}
+{% block body %} 
+    Удалить издателя?
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock body %}

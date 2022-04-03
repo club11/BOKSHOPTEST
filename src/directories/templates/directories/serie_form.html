@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} Serie form {% endblock title %}
+{% block body %} 
+   <b><h1>Создать серию</h1></b>
+   {{ is_valid }}
+   <form action="" method="post">
+    {% csrf_token %} 
+    {{form}} 
+    <button type="submit">Submit</button>
+    </form>
+{% endblock body %}
+
+
+
+
+{# <input type="number" name="author" id=""><br> #}
+{# <button type="submit">Submit</button> #}

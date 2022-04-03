@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock title %}
+{% block body %}
+
+<div class="container">
+  <div class="row row-cols-4">
+    {% for object in page_obj %}
+    <div class="col">
+      <div class="card text-white bg-dark mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ object.picture.url }}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card text-white bg-dark mb-3">
+              <h5 class="card-title" style="color:#FFFF00"> <b>{{ object.book_name }}</b></h5> 
+              <p class="card-text"> 
+                Автор: <b style="color:#FFFF00">{{ object.author }}</b></br>  
+                Серия: {{ object.serie }}</br>
+                Жанр: {{ object.genre }}</br>
+                Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
+                <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+            </p>
+              <div><a href="{% url 'books:book' object.pk %}" class="btn-sm btn-primary">Подробнее</a>    
+              <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn-sm btn-primary">В корзину</a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include '../paginator.html' %}
+
+{% endblock body %}
+
+
+
+
+
+{# {{ page_obj }}  --- список для пагинации #}
+

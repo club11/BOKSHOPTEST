@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Serie update {% endblock title %}
+{% block body %} 
+   <b><h1>Изменить серию</h1></b>
+
+   <form action="" method="post">
+    {% csrf_token %} 
+    {{form}} 
+    <button type="submit">Submit</button>
+    </form>
+{% endblock body %}
+
+
+

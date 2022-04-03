@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Editor list {% endblock title %}
+{% block body %} 
+    <ul>
+    {% for editor in editor_list %}
+    <li>{{ forloop.counter }}. <a href="{% url 'directories:editor' editor.pk  %}"> {{ editor }} </a>
+        || <a href="{% url 'directories:editor_update' editor.pk  %}">Update</a>
+        || <a href="{% url 'directories:editor_delete' editor.pk  %}">Delete</a></li>
+    {% endfor %}
+    </ul>
+    <button type="submit"><a href="{% url 'directories:editor_create'  %}" >Create</a></button>
+{% endblock body %}

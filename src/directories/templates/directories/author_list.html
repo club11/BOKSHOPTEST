@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %} Author list {% endblock title %}
+{% block body %} 
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Detail</th>
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
+            </tr>
+        </thead>  
+        <tbody>
+            {% for author in object_list %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'directories:author' author.pk  %}"> {{ author }} </a></td>
+              <td><a href="{% url 'directories:author_update' author.pk  %}">Update</a></td>
+              <td><a href="{% url 'directories:author_delete' author.pk  %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>      
+    </table>
+    <button class="btn btn-warning"><a href="{% url 'directories:author_create' %}">Создать автора?</a></button>
+{% endblock body %}
+
+{# <li>{{ forloop.counter }}. <a href="/directories:author_detail/{{ some_author.pk }}"> {{ some_author }}</a> </li> #}  

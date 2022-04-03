@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Author delete {% endblock title %}
+{% block body %} 
+   <b><h1>Удалить автора?</h1></b>
+   {{ is_valid }}
+    <form action="" method="post">
+        {% csrf_token %} 
+        <button type="submit">Submit</button>
+    </form>
+{% endblock body %}
+
+
+

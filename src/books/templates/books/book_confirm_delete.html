@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Book delete {% endblock title %}
+{% block body %}
+Удалить книгу?
+{{ is_valid }}
+    <form action="" method="post">
+        {% csrf_token %} 
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+
+    <button type="submit" class="btn btn-light"><a href="{% url 'books:book_list' %}">Назад к списку</a></button>
+{% endblock body %}
+
+
+

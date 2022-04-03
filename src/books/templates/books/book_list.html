@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %} Book list {% endblock title %}
+{% block body %}
+Перечень книг
+
+{% if search_request %}
+<h3>результат поиска по запросу: "{{ search_request }}"</h3>
+{% endif %}
+<form action="{% url 'books:book_list' %}" method="get">
+  <input type="text" name="q">
+  <button type="submit">Поиск</button>
+</form>
+
+<table class="table table-dark table-borderless">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for book in object_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'books:book' book.pk %}">{{ book.book_name }}</a></td>
+        <td><a href="{% url 'books:book_update' book.pk %}">Update</a></td>
+        <td><a href="{% url 'books:book_delete' book.pk %}" >Delete</a></td>
+      </tr>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-light"><a href="{% url 'books:book_create' %}">Создать книгу</a></button>
+    </tbody>
+  </table>
+{% endblock body %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} Genre list {% endblock title %}
+{% block body %} 
+    <ul>
+    {% for genre in genre_list %}
+    <li>{{ forloop.counter }}. <a href="{% url 'directories:genre' genre.pk  %}"> {{genre }} </a>
+        || <a href="{% url 'directories:genre_update' genre.pk  %}">Update</a>
+        || <a href="{% url 'directories:genre_delete' genre.pk  %}">Delete</a></li>
+    {% endfor %}
+    </ul>
+    <button><a href="{% url 'directories:genre_create' %}">Создать жанр?</a></button>
+{% endblock body %}
+
+
+
+
+
+    {#<li>{{ forloop.counter }}. <a href="/directories:genre_detail/{{ genre.pk }}"> {{ genre }}</a>#}
+    {#    <a href="/directories:genre_update/{{ genre.pk }}">Update</a>#}
+    {#   <a href="/directories:genre_delete/{{ genre.pk }}">Delete</a></li>#}
