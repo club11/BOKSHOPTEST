@@ -33,6 +33,13 @@ class BookasGoodsListView(ListView):
     template_name =  'books/book_goods_list.html'
     paginate_by = 4
 
+    def get_queryset(self):                                 # поиск по книгам | авторам
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(Q(book_name__icontains=q) | Q(author__author__icontains=q))      # крутой НОРМ способ фильтрации по полю book_name через __icontains=q  ( | - или   & - и) --- author__author_ - поиск по полю связанной foreign таблицы
+        return queryset  
+
 class BookDetailView(DetailView):
     model = models.Book
     template = 'book_detail.html'

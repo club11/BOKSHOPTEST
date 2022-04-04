@@ -67,3 +67,4 @@ class RegisterForm(forms.Form):
         except ValidationError as error:
             self.add_error('password2', error)
         return password2
+

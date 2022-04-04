@@ -1,0 +1,7 @@
+{% if search_request %}
+<h3>результат поиска по запросу: "{{ search_request }}"</h3>
+{% endif %}
+<form action="{% url 'books:book_goods_list' %}" method="get">
+  <input type="text" name="q">
+  <button type="submit">Поиск</button>
+</form>

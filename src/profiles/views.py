@@ -3,6 +3,7 @@ from django.views.generic import FormView
 from . import forms
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
+from django.contrib.auth.views import LogoutView
 
 from profiles.models import User, Profile
 
@@ -19,3 +20,6 @@ class RegisterFormView(FormView):
         profile = Profile.objects.create(user=user, tel=tel)
         login(self.request, user)                       #логиним юзера
         return super().form_valid(form)
+
+class UserLogoutView(LogoutView):
+    template_name = 'books/book_list.html'
