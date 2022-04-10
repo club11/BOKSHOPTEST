@@ -13,13 +13,16 @@
       <a class="nav-link" href="{% url 'directories:directories' %}">Перечень справочников</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active"  href="">{{ user }}</a>
+      <a class="nav-link active"  href="{% url 'profiles:profile_user' %}">{{ user }}</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'orders:create_order' %}">Корзина</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'profiles:register' %}">Регистрация</a>
+    </li>
+    <li class="nav-item"> 
+      <a class="nav-link" href="{% url 'profiles:login' %}?{{ request.path }}">Войти</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'profiles:logout' %}">Выйти</a>

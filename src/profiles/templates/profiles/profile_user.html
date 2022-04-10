@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock title %}
+{% block body %}
+<h1>Профиль</h1>
+
+<a href="{% url 'profiles:password_change' %}">Изменить пароль</a>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class=" btn btn-success">Редактировать</button>
+</form>
+{% endblock body %}

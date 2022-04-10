@@ -7,5 +7,14 @@ class ProfileAdmin(admin.ModelAdmin):
         'pk',
         'user',
         'tel',
+        'email',
+        'first_name',
+        'last_name',
+        'country',
+        'city',
+        'index',
+        'adress',
+
     ]
 admin.site.register(models.Profile, ProfileAdmin)
+
