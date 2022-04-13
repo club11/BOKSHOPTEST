@@ -6,8 +6,6 @@ from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
 
-
-
 from directories.models import Author, Serie, Genre ,Editor
 
 # Create your models here.
@@ -132,6 +130,7 @@ class Book(models.Model):
         auto_now=True,
         auto_now_add=False
     ) 
+
 
     def get_absolute_url(self):
         return reverse('books:book', args = [self.pk])

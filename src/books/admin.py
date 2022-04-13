@@ -5,6 +5,7 @@ from . import models
 
 class BookAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'book_name',
         'price',
         'currency_price',
