@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{#   {% load crispy_forms_tags %} #}
+{% block title %} Order detail {% endblock title %}
+{% block body %}
+<h2>Детали заказа</h2>
+
+<h2>номер заказа: {{ object.pk }}</h2>
+<table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Сумма</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for object in order.cart.cart.all %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ object.book.book_name }}</td>
+        <td>{{ object.unit_price }}</td>
+        <td>{{ object.quantity }}</td>
+        <td>{{ object.total_price }}</td>
+      </tr>
+      {% endfor %}
+
+      <tr> 
+      <th colspan="3"></th>
+      <th>статус заказа:</th>
+      <th>   
+        <form action="{% url 'orders:order_stat_update' %}" method="post" >
+          <select class="form-select" aria-label="Default select example" name="order_status">
+            <option selected>{{ order.order_status.order_status }}</option>
+            <option value="1">новый</option>
+            <option value="2">принят</option>
+            <option value="3">выполнен</option>
+          </select>
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-danger" name="order" value="{{ object.pk }}">Изменить статус</button>
+        </form>
+
+
+      </th>  
+      </tr> 
+      <tr> 
+      <th colspan="3"></th>
+      <th>дата заказа:</th>
+      <th>{{ order.created }}</th>
+      </tr>   
+      <th colspan="3"></th>
+      <th>итого:</th>
+      <th>{{ order.cart.cart_total_price }}</th>
+    </tbody>
+</table>
+{% endblock body %}
+
+

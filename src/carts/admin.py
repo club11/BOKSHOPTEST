@@ -6,6 +6,7 @@ from . import models
 
 class CartAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'customer',
     ]
 

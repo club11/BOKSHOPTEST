@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{#   {% load crispy_forms_tags %} #}
+{% block title %} Order list {% endblock title %}
+{% block body %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col"># заказа</th>
+        <th scope="col">пользователь</th>
+        <th scope="col">заказ создан</th>
+        <th scope="col">обновление статуса заказа</th>
+        <th scope="col">статус заказа</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for order in object_list %}
+      <tr>
+        <td><a href="{% url 'orders:detail_order' order.pk  %}">{{ order.pk }} </a></td>
+        <td>{{ order.contact_info }}</td>        
+        <td>{{ order.created }}</td>
+        <td>{{ order.updated }}</td>
+        <td>{{ order.order_status.order_status }}</td>
+      </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  {% include '../paginator.html' %} 
+{% endblock body %}
+{{ order.cart.pk }}
+
+

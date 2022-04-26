@@ -3,6 +3,7 @@ from . import models
 
 class OrderStatusAdmin(admin.ModelAdmin):
     list_display = [
+        'pk',
         'order_status',
     ]
 
@@ -14,6 +15,7 @@ class OrderAdmin(admin.ModelAdmin):
         'contact_info',
         'created',
         'updated',
+        'order_status',
     ]  
 
 
