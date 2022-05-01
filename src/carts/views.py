@@ -55,7 +55,6 @@ class GoodInCartDeleteView(RedirectView):
 class CartUpdate(View):
     def post(self, request):
         action = self.request.POST.get("submit")                 # для сигнала выбор действия охранить корзину иили сохр и заказ
-
          # get cart
         cart_id = self.request.session.get('cart_id')               #обращаемся к СЕССИИ текущей
         cart, created = models.Cart.objects.get_or_create(          #распаковка тапла
@@ -80,9 +79,3 @@ class CartUpdate(View):
              return HttpResponseRedirect(reverse_lazy('orders:create_order'))
         else:
             return HttpResponseRedirect(reverse_lazy('carts:cart'))
-
-
-
-#class GoodInCartDeleteView(DeleteView):
-#    model = models.BookInCart
-#    success_url = reverse_lazy('carts:cart')

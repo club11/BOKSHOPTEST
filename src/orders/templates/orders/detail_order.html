@@ -4,7 +4,9 @@
 {% block body %}
 <h2>Детали заказа</h2>
 
-<h2>номер заказа: {{ object.pk }}</h2>
+<h3>пользователь: {{ order.contact_info }}</h3>
+<h4>контактные данные заказчика: {{ order.tel }}</h4>
+<h3>номер заказа: {{ object.pk }}</h3>
 <table class="table table-dark table-hover">
     <thead>
       <tr>
@@ -36,6 +38,7 @@
             <option value="1">новый</option>
             <option value="2">принят</option>
             <option value="3">выполнен</option>
+            <option value="4">отменен</option>
           </select>
           {% csrf_token %}
           <button type="submit" class="btn btn-sm btn-danger" name="order" value="{{ object.pk }}">Изменить статус</button>

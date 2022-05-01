@@ -3,13 +3,11 @@ from posixpath import split
 from pyexpat import model
 from django.shortcuts import render
 from requests import request
-
 import books
 from books import models
 from carts.models import Cart, User
-from . import models 
+from . import models, forms
 from . models import Order, carts_models
-from . import forms
 from django.views.generic import FormView, ListView, DetailView, View
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -37,7 +35,6 @@ class CreateOrderView(FormView):
             return HttpResponseRedirect(reverse_lazy('carts:cart'))
         ci = form.cleaned_data.get('contact_info')                             # Неочевидный ход через форму
         orderstatus = models.OrderStatus.objects.get(pk=1)
-
         if self.request.user.is_anonymous:
             order = models.Order.objects.create(
                 cart=cart,
@@ -54,7 +51,6 @@ class CreateOrderView(FormView):
             ) 
         del self.request.session['cart_id']         #чистим сессию bad luck
         #self.request.session.delete('cart_id')    #чистим сессию bad luck / riginal method ain't workin'
-
         books_in_cart = order.cart.cart.all()               ##### # отправляем сообщение пользователю (подготовка перечня названий книг)
         book_names = []
         for n in range(0, books_in_cart.count()):
@@ -62,7 +58,7 @@ class CreateOrderView(FormView):
             book_names.append(names)    
         book_names_str = ''.join(book_names)
         messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str}  принят')            # отправляем сообщение пользователю
-        return HttpResponseRedirect(reverse_lazy('carts:cart'))
+        return HttpResponseRedirect(reverse_lazy('books:book_goods_list'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +69,6 @@ class CreateOrderView(FormView):
         )       
         context['object'] = cart
         return context 
-
 class ListOrderView(ListView):
     model = models.Order
     template_name = 'orders/list_order.html'
@@ -88,24 +83,20 @@ class OrderStatusUpdateView(View):
     #def post(self, request, pk):
     def post(self, request, **kwargs):
         order_status_pk = self.request.POST.get('order_status')
+        print(type(order_status_pk))
         obj_pk = self.request.POST.get('order')
         obj = models.Order.objects.get(pk=obj_pk)
-        #print('current order class status = ', obj.order_status.order_status, obj.order_status.pk)
-        #print('chosen order status pk =', order_status_pk)
-        #print('тип текущего класса заказа = ',order_status_pk, type(order_status_pk))
+        order_status_values_list = models.OrderStatus.objects.values_list()
+        order_status_num = order_status_values_list.count()
         if order_status_pk.isalpha() is True:
             return HttpResponseRedirect(reverse_lazy('orders:list_order'))
         else:            
             order_status_current_pk_position = int(order_status_pk)
-            if order_status_current_pk_position in range(0, 4):
-                new_order_status = models.OrderStatus.objects.get(pk=int(order_status_pk))
-                #print(obj.order_status, 'OLD=', obj.order_status.order_status, obj.order_status.pk)   
-                #print(new_order_status, 'NEW=', new_order_status.order_status, new_order_status.pk, 'ЗДЕСЬ НАИМЕНОВАНИЕ НОВОГО СТАТУСА')         
+            if order_status_current_pk_position in range(order_status_num + 1):
+                new_order_status = models.OrderStatus.objects.get(pk=int(order_status_pk))      
                 obj.order_status = new_order_status
                 obj.save()
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
-
-        
 
 class MyListOrderView(ListView):
     model = models.Order
