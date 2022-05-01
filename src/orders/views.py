@@ -6,8 +6,9 @@ from requests import request
 
 import books
 from books import models
+from carts.models import Cart, User
 from . import models 
-from . models import carts_models
+from . models import Order, carts_models
 from . import forms
 from django.views.generic import FormView, ListView, DetailView, View
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,7 +22,7 @@ class CreateOrderView(FormView):
 
     def get_initial(self):                      # подкидывем доп данные в заказ(телефон и прочее из данных ппользователя)
         if self.request.user.is_anonymous:
-            return {}
+            return {'contact_info': ' ', 'tel':' '}
         username = self.request.user.get_username()
         tel = self.request.user.profile.tel
         return {'contact_info': username, 'tel':tel}
@@ -36,11 +37,21 @@ class CreateOrderView(FormView):
             return HttpResponseRedirect(reverse_lazy('carts:cart'))
         ci = form.cleaned_data.get('contact_info')                             # Неочевидный ход через форму
         orderstatus = models.OrderStatus.objects.get(pk=1)
-        order = models.Order.objects.create(
-            cart=cart,
-            contact_info=ci,
-            order_status = orderstatus
-        ) 
+
+        if self.request.user.is_anonymous:
+            order = models.Order.objects.create(
+                cart=cart,
+                contact_info = ci,
+                tel= form.cleaned_data.get('tel'),
+                order_status = orderstatus
+            ) 
+        else:
+            order = models.Order.objects.create(
+                cart=cart,
+                contact_info=ci,
+                order_status = orderstatus,
+                tel= form.cleaned_data.get('tel'),
+            ) 
         del self.request.session['cart_id']         #чистим сессию bad luck
         #self.request.session.delete('cart_id')    #чистим сессию bad luck / riginal method ain't workin'
 
@@ -62,7 +73,6 @@ class CreateOrderView(FormView):
         )       
         context['object'] = cart
         return context 
-
 
 class ListOrderView(ListView):
     model = models.Order
@@ -89,17 +99,25 @@ class OrderStatusUpdateView(View):
             order_status_current_pk_position = int(order_status_pk)
             if order_status_current_pk_position in range(0, 4):
                 new_order_status = models.OrderStatus.objects.get(pk=int(order_status_pk))
-                print(obj.order_status, 'OLD=', obj.order_status.order_status, obj.order_status.pk)   
-                print(new_order_status, 'NEW=', new_order_status.order_status, new_order_status.pk, 'ЗДЕСЬ НАИМЕНОВАНИЕ НОВОГО СТАТУСА')         
+                #print(obj.order_status, 'OLD=', obj.order_status.order_status, obj.order_status.pk)   
+                #print(new_order_status, 'NEW=', new_order_status.order_status, new_order_status.pk, 'ЗДЕСЬ НАИМЕНОВАНИЕ НОВОГО СТАТУСА')         
                 obj.order_status = new_order_status
                 obj.save()
-                print(obj.order_status.pk, obj.order_status.order_status)
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
 
         
 
+class MyListOrderView(ListView):
+    model = models.Order
+    template_name = 'orders/list_order.html'
+    paginate_by = 30
 
-
+    def get_queryset(self):
+        username = self.request.user.get_username()
+        order = models.Order.objects.filter(contact_info=username)
+        #queryset = super().get_queryset()
+        queryset = order
+        return queryset
 
 
 

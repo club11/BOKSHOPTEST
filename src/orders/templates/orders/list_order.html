@@ -8,6 +8,7 @@
       <tr>
         <th scope="col"># заказа</th>
         <th scope="col">пользователь</th>
+        <th scope="col">контактные данные заказчика</th>        
         <th scope="col">заказ создан</th>
         <th scope="col">обновление статуса заказа</th>
         <th scope="col">статус заказа</th>
@@ -17,7 +18,8 @@
         {% for order in object_list %}
       <tr>
         <td><a href="{% url 'orders:detail_order' order.pk  %}">{{ order.pk }} </a></td>
-        <td>{{ order.contact_info }}</td>        
+        <td>{{ order.contact_info }}</td>  
+        <td>{{ order.tel}}</td>          
         <td>{{ order.created }}</td>
         <td>{{ order.updated }}</td>
         <td>{{ order.order_status.order_status }}</td>

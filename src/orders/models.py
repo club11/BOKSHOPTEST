@@ -1,6 +1,10 @@
+from tabnanny import verbose
+from tkinter import CASCADE
 from unittest import mock
 from django.db import models
 from carts import models as carts_models
+from profiles import models as profiles_models
+
 
 class OrderStatus(models.Model):
     order_status = models.CharField(
@@ -36,6 +40,11 @@ class Order(models.Model):
         verbose_name='обновлен',
         auto_now=True,
         auto_now_add=False
+    )
+    tel = models.CharField(
+        verbose_name='телефон',
+        max_length =20,
+        default='+375XX XXX XX XX'
     )
 
 

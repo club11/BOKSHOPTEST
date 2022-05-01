@@ -11,7 +11,6 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'pk',
         'cart',
-        'order_status',
         'contact_info',
         'created',
         'updated',
