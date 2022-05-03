@@ -30,6 +30,8 @@ class Order(models.Model):
     #contact_info =  User or
     contact_info = models.TextField(
         verbose_name='контактная информация',
+        blank=True,
+        null=False
     )
     created = models.DateTimeField(
         verbose_name='создан',
@@ -41,6 +43,9 @@ class Order(models.Model):
         auto_now=True,
         auto_now_add=False
     )
+    #tel = models.ForeignKey(
+    #    Pro
+    #)
     tel = models.CharField(
         verbose_name='телефон',
         max_length =20,

@@ -29,7 +29,7 @@ class BookInCart(models.Model):
         related_name='cart',                    # имя, по которому можно обратиться к корзине (типо товары (в корзине)) типо как goods  - товары. обращение выйдет cart.cart.all()
         on_delete=models.CASCADE,        
     )
-    book =models.ForeignKey(
+    book = models.ForeignKey(
         'books.Book',                           # ЛЕНИВЫЙ СПОСОБ ИМПОРТИРОВАНИЯ МОДЕЛИ
         verbose_name='Книга',
         related_name='books_in_cart',

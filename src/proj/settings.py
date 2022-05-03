@@ -138,3 +138,12 @@ MEDIA_ROOT= BASE_DIR / 'media/'      #создали папку для меди�
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'club11bookshop@mail.ru'
+EMAIL_HOST_PASSWORD = 's28kw6BFQj3Zrgs28cCQ'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
