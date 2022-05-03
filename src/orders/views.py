@@ -1,6 +1,7 @@
 from asyncio.windows_events import NULL
 from audioop import reverse
 from contextlib import nullcontext
+import email
 from posixpath import split
 from pyexpat import model
 from django.shortcuts import render
@@ -46,11 +47,14 @@ class CreateOrderView(FormView):
                 order_status = orderstatus
             ) 
         else:
+            user= self.request.user                                 #подкидываем почту в модель заказа если не анонимус
+            email = profiles_models.Profile.objects.get(user=user).email #подкидываем почту в модель заказа если не анонимус
             order = models.Order.objects.create(
                 cart=cart,
                 contact_info=ci,
                 order_status = orderstatus,
                 tel= form.cleaned_data.get('tel'),
+                email_adress = email                           #подкидываем почту в модель заказа если не анонимус
             ) 
         del self.request.session['cart_id']         #чистим сессию bad luck
         #self.request.session.delete('cart_id')    #чистим сессию bad luck / riginal method ain't workin'
@@ -94,31 +98,13 @@ class OrderDetailView(DetailView):
     success_url = reverse_lazy('orders:list_order')
 
 class OrderStatusUpdateView(View):
-
-    #def get_email(self):
-    #    order_pk = self.request.POST.get('order_status')
-    #    print(order_pk)
-    #    tel = models.Order.objects.get(pk=order_pk).tel
-    #    email_exist = profiles_models.Profile.objects.filter(tel=tel)
-    #    print(email_exist)
-
     #def post(self, request, pk):
     def post(self, request, **kwargs):
         order_status_pk = self.request.POST.get('order_status')
         obj_pk = self.request.POST.get('order')
         obj = models.Order.objects.get(pk=obj_pk)
         order_status_values_list = models.OrderStatus.objects.values_list()
-        order_status_num = order_status_values_list.count()
-                                                                        #проверка на наличие зарегестрированного пользователя путем наличия имени пользователя в заказе
-
-        obj_pk = self.request.POST.get('order')
-        tel = models.Order.objects.get(pk=obj_pk).cart.customer
-        print(tel)
-        #email_exist = profiles_models.Profile.objects.filter(tel=tel)
-        #print(email_exist)
-
-
-
+        order_status_num = order_status_values_list.count()                                   #проверка на наличие зарегестрированного пользователя путем наличия имени пользователя в заказ
         if order_status_pk.isalpha() is True:
             return HttpResponseRedirect(reverse_lazy('orders:list_order'))
         else:            
@@ -127,7 +113,8 @@ class OrderStatusUpdateView(View):
                 new_order_status = models.OrderStatus.objects.get(pk=int(order_status_pk))      
                 obj.order_status = new_order_status
                 obj.save()
-                if new_order_status.order_status == 'принят':
+                email = models.Order.objects.get(pk=obj_pk).email_adress        #получаем почту от зарегенного пользователя
+                if new_order_status.order_status == 'принят' and email is not None: # если статус заказа изменяется на ПРИНЯТ и есть почтовый адрес то отправить сообщение в почту
                     order = models.Order.objects.get(pk=obj_pk)
                     books_in_cart = order.cart.cart.all()               ##### # отправляем сообщение пользователю на почту (подготовка перечня названий книг)
                     book_names = ['Ваш заказ принят:']

@@ -1,3 +1,4 @@
+import email
 from tabnanny import verbose
 from tkinter import CASCADE
 from unittest import mock
@@ -43,13 +44,13 @@ class Order(models.Model):
         auto_now=True,
         auto_now_add=False
     )
-    #tel = models.ForeignKey(
-    #    Pro
-    #)
     tel = models.CharField(
         verbose_name='телефон',
-        max_length =20,
+        max_length = 20,
         default='+375XX XXX XX XX'
     )
-
+    email_adress = models.EmailField(
+        verbose_name='email', 
+        null=True
+    )
 

@@ -15,6 +15,7 @@ class OrderAdmin(admin.ModelAdmin):
         'created',
         'updated',
         'order_status',
+        'email_adress',
     ]  
 
 
