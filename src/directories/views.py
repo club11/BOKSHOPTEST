@@ -4,6 +4,7 @@ from re import template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 #from airplanes import models
 
@@ -14,8 +15,9 @@ from . import forms
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView, TemplateView
 
 
-class DirectoriesTemplateView(TemplateView):
+class DirectoriesTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'directories/directories.html'
+    login_url = reverse_lazy('profiles:login')
 
     def  get_context_data(self, **kwargs):                              #Типовой пример расширения функционала view:
         #list_a = models.Author.objects.all()                        #list_a = models.Author.objects.all()

@@ -77,5 +77,7 @@ class CartUpdate(View):
             return HttpResponseRedirect(reverse_lazy('carts:cart'))
         elif action == 'create_order':
              return HttpResponseRedirect(reverse_lazy('orders:create_order'))
+        #elif action == 'create_order' and book.quantity == None:
+        #     return HttpResponseRedirect(reverse_lazy('orders:create_order'))  
         else:
             return HttpResponseRedirect(reverse_lazy('carts:cart'))

@@ -11,11 +11,10 @@ from profiles.models import User, Profile
 
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
-    #next = reverse_lazy('books:home')
+    next_page = reverse_lazy('profiles:profile_user')
 
-    def get_redirect_url(self):
-            next = reverse_lazy('books:home')
-            return next
+
+
 class RegisterFormView(FormView):
     template_name = 'profiles/register_user.html'
     form_class = forms.RegisterForm

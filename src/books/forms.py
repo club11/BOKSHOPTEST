@@ -33,13 +33,13 @@ class BookForm(forms.ModelForm):
 #доработать рейтинг
 class RatingForm(forms.ModelForm):
     star = forms.ModelChoiceField(
-        queryset=models.RatingStar.objects.all(),
+        queryset=models.RatingStar.objects.all(),       # сбор знчений квэрисэтом!
         widget=forms.RadioSelect,
         empty_label=None
     )
 
     class Meta:
         model = models.Rating
-        fields = ('star',)
+        fields = ('star',)          # переопределить поле на ModelChoiceField формы (удобно!)
 ######################################################       
         

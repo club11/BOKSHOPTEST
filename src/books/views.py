@@ -46,7 +46,7 @@ class BookDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        context['star_form'] =forms.RatingForm
+        context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
         return context
 
 class BookCreateView(CreateView):

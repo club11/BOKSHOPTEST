@@ -35,6 +35,9 @@ class CreateOrderView(FormView):
             pk=cart_id,                                       # поле по которому производится поиск
             defaults={},
         )
+        if cart.cart_total_price() is NULL:                                                                                             #ЕСЛИ ЗАКАЗ ПУСТОЙ
+            messages.add_message(self.request, messages.INFO, 'Ваша корзина пуста')            # отправляем сообщение пользователю
+            return HttpResponseRedirect(reverse_lazy('orders:create_order'))                                                            #ЕСЛИ ЗАКАЗ ПУСТОЙ  
         if created:
             return HttpResponseRedirect(reverse_lazy('carts:cart'))
         ci = form.cleaned_data.get('contact_info')                             # Неочевидный ход через форму
@@ -74,7 +77,7 @@ class CreateOrderView(FormView):
             messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку. Для уточнения заказа с Вами свяжется наш менеджер по указанному телефону {tel}')
         #return HttpResponseRedirect(reverse_lazy('books:book_goods_list'))
         if self.request.user.is_anonymous:
-            return HttpResponseRedirect(reverse_lazy('orders:list_order'))
+            return HttpResponseRedirect(reverse_lazy('books:book_goods_list'))
         else:
             return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
 
