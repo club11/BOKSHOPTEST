@@ -6,14 +6,15 @@
   <li class="nav-item">
     <a class="nav-link" href="{% url 'books:book_goods_list' %}">Книги</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'books:book_list' %}">Перечень товаров </a>
-  </li>
     {% if user.is_authenticated %}
       {% for object in user.groups.all %}
           <li>{% if object.name == 'staff' %}</li>
-        <li class="nav-item">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'books:book_list' %}">Перечень товаров </a>
+          </li>
+          <li class="nav-item">
           <a class="nav-link" href="{% url 'directories:directories' %}">Перечень справочников</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link"  href="{% url 'orders:list_order' %}">Список заказов</a>
           </li>
