@@ -108,32 +108,32 @@ class Book(models.Model):
 
 ########################################################################################
 #доработать рейтинг
-class RatingStar(models.Model):
-    value = models.IntegerField(
-        verbose_name="Значение",
-        default=0,
-    )
-
-    def __str__(self):
-        return f'{self.value}'
-
-    class Meta:
-        verbose_name = "Звезда рейтинга"    
-        verbose_name_plural = "Звезды рейтинга"  
-        ordering = ['-value']
-
-class Rating(models.Model):
-    customer_ip = models.CharField('IP адрес', max_length=15)
-    star = models.ForeignKey(
-        RatingStar,
-        on_delete=models.CASCADE,
-        verbose_name='звезда'
-    )
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='книга')
-
-    def __str__(self):
-        return f'{self.star}'
-#######################################################################################
+#class RatingStar(models.Model):
+#    value = models.IntegerField(
+#        verbose_name="Значение",
+#        default=0,
+#    )
+#
+#    def __str__(self):
+#        return f'{self.value}'
+#
+#    class Meta:
+#        verbose_name = "Звезда рейтинга"    
+#        verbose_name_plural = "Звезды рейтинга"  
+#        ordering = ['-value']
+#
+#class Rating(models.Model):
+#    customer_ip = models.CharField('IP адрес', max_length=15)
+#    star = models.ForeignKey(
+#        RatingStar,
+#        on_delete=models.CASCADE,
+#        verbose_name='звезда'
+#    )
+#    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='книга')
+#
+#    def __str__(self):
+#        return f'{self.star}'
+########################################################################################
 
 
         

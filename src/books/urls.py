@@ -15,5 +15,5 @@ urlpatterns = [
     path('book_update/<int:pk>/', books_views.BookUpdateView.as_view(), name='book_update'), 
     path('book_delete/<int:pk>/', books_views.BookDeleteView.as_view(), name='book_delete'), 
 
-    path('add-rating/', books_views.AddStarRaing.as_view(), name='add_rating'), 
+#    path('add-rating/', books_views.AddStarRaing.as_view(), name='add_rating'), 
 ]

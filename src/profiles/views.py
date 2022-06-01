@@ -1,24 +1,50 @@
+from email.headerregistry import Group
+from itertools import count
 from pyexpat import model
+from unicodedata import name
 from django.views.generic import FormView
 from requests import request
+from profiles import models
 from . import forms
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
-
-
 from profiles.models import User, Profile
+from django.contrib.auth.models import Group, Permission
+from django.http import HttpResponse
 
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
     next_page = reverse_lazy('profiles:profile_user')
 
-
+    def get_success_url(self):                                                  # перенаправить юзера staff на иную страницу
+        user = self.request.user
+        users_groups = user.groups.filter(name__contains='staff')
+        if users_groups.count() > 0:
+            staff_group = user.groups.get(name = 'staff')
+            if staff_group.name == 'staff':
+                return reverse_lazy('books:book_list')                  # ПЕРЕНАПРАВИТ здесь
+        return super().get_success_url()
 
 class RegisterFormView(FormView):
     template_name = 'profiles/register_user.html'
     form_class = forms.RegisterForm
     success_url = reverse_lazy('books:home')
+
+    permission = Permission.objects.filter(name__in =['Can add comment', 
+        'Can change comment',
+        'Can view comment', 
+        'Can add order', 
+        'Can view order', 
+        'Can change order status',
+        'Can view order status',
+        'Can add profile',
+        'Can change profile',
+        'Can view profile',
+        'Can view author']
+        )
+    customer_group = Group.objects.get(name='test_group')                #добавить зарегестрированного пользователя в ГРУППУ кастомеры
+    customer_group.permissions.set(permission)
 
     def form_valid(self, form):                         #создаем юзера и профиль в БД
         username = form.cleaned_data.get('username')
@@ -27,10 +53,15 @@ class RegisterFormView(FormView):
         user = User.objects.create_user(username=username,password=password)
         profile = Profile.objects.create(user=user, tel=tel)
         login(self.request, user)                       #логиним юзера
+
+        user.groups.add(self.customer_group)                                     #добавить зарегестрированного пользователя в ГРУППУ кастомеры
+        #user.user_permissions.set(self.permission)                              #ТЕРМИТЫ
+        #print(user.groups.all(), user.user_permissions.all(), 'IIIIIIIIIII', user.get_group_permissions(), 'IIIII')          
         return super().form_valid(form)
 
 class UserLogoutView(LogoutView):
     template_name = 'books/home.html'
+    next_page = reverse_lazy('books:home')
 
 class UpdateRegisterView(FormView):
     template_name = 'profiles/profile_user.html'
@@ -76,42 +107,3 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = 'profiles/password_change_form.html'
     success_url = reverse_lazy('profiles:profile_user')
 
-# ИЗМЕНЕНИЕ ПАРОЛЯ ВЕР 
-#################
-    #def password_change(request):
-    #    if request.method == 'POST':
-    #        form = forms.UpdateRegisterForm(user=request.user, data=request.POST)
-    #        if form.is_valid():
-    #            form.save()
-    #            update_session_auth_hash(request, form.user)
-
-# ИЗМЕНЕНИЕ ПАРОЛЯ
-###############################################################
-    #        user = User.objects.get(username=username)
-    #    user.set_password(password)           # изменить пароль
-    #    user.save()
-##########################################################
-
-# ПЕРЕАДРЕСАЦИЯ ПОСЛЕ ЗАЛОГИНИВАНИЯ
-###########################################################
-    ###def get_redirect_url(self):
-    ###    if self.request.GET:
-    ###        previous_page = self.request.get_full_path().split('?/')
-    ###        print( previous_page) 
-    ###        previous_page = self.request.get_full_path().split('?/')[1]     
-    ###        next_page_list = str(previous_page.split('/')) 
-    ###        print(type(next_page_list))
-    ###        print(next_page_list)
-    ###        next_page_list = str(next_page_list)
-    ###        print(next_page_list)
-    ###        next_page_list = next_page_list.rstrip('')
-    ###        print('NNNNNN', next_page_list)
-    ###        print(type(next_page_list))
-    ###    next = next_page_list
-    ###    if self.request.POST:
-    ###        next = reverse_lazy('books:home')
-    ###    return next
-    ###    #next = reverse_lazy('books:home')
-
-    #def current_page(self):
-    ########################################################

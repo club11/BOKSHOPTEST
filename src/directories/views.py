@@ -4,7 +4,7 @@ from re import template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 #from airplanes import models
 
@@ -15,9 +15,10 @@ from . import forms
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView, TemplateView
 
 
-class DirectoriesTemplateView(LoginRequiredMixin, TemplateView):
+class DirectoriesTemplateView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     template_name = 'directories/directories.html'
     login_url = reverse_lazy('profiles:login')
+    permission_required = ('directories.view_author', )
 
     def  get_context_data(self, **kwargs):                              #Типовой пример расширения функционала view:
         #list_a = models.Author.objects.all()                        #list_a = models.Author.objects.all()
@@ -27,8 +28,11 @@ class DirectoriesTemplateView(LoginRequiredMixin, TemplateView):
         #context['list_b'] = list_b                                      #context['list_b'] = list_b 
         return context                                                  #return context      
 
-class AuthorListView(ListView):
+class AuthorListView(LoginRequiredMixin, ListView):
     model = models.Author
+    login_url = reverse_lazy('profiles:login')
+
+    #permission_required = 'Can view author'
 
     def get_queryset(self):                                     # еще один типовой пример
         qs = super().get_queryset()                             # доработка qeryseta
@@ -37,71 +41,90 @@ class AuthorListView(ListView):
         #print(self.request.POST)                                # надо поизучать 
         #print(self.request.GET)  
         return qs
-class AuthorDetailView(DetailView):
+class AuthorDetailView(LoginRequiredMixin,DetailView):
     model = models.Author
     template = 'author_detail.html'
+    login_url = reverse_lazy('profiles:login')
 
-class AuthorCreateView(CreateView):
+class AuthorCreateView(LoginRequiredMixin,CreateView):
     model = models.Author
     form_class = forms.AuthorCreateForm
+    login_url = reverse_lazy('profiles:login')
     # либо прописать просто поля модельной формы:
     #fields = [
     #    'author',
     #]
 
-class AuthorUpdateView(UpdateView):
+class AuthorUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Author
     form_class = forms.AuthorCreateForm
+    login_url = reverse_lazy('profiles:login')
 
-class AuthorDeleteView(DeleteView):
+class AuthorDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Author
     success_url = reverse_lazy('directories:author_list')
+    login_url = reverse_lazy('profiles:login')
 
 ##############################################################################################################
-class EditorListView(ListView):
+class EditorListView(LoginRequiredMixin,ListView):
     model = models.Editor
-class EditorDetailView(DetailView):
+    login_url = reverse_lazy('profiles:login')
+class EditorDetailView(LoginRequiredMixin,DetailView):
     model = models.Editor
+    login_url = reverse_lazy('profiles:login')
 
-class EditorCreateview(CreateView):
+class EditorCreateview(LoginRequiredMixin,CreateView):
     model = models.Editor
     form_class = forms.EditorCreateForm
-class EditorUpdateView(UpdateView):
+    login_url = reverse_lazy('profiles:login')
+class EditorUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Editor
     form_class = forms.EditorCreateForm
-class EditorDeleteView(DeleteView):
+    login_url = reverse_lazy('profiles:login')
+class EditorDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Editor
     success_url = reverse_lazy('directories:editor_list')
+    login_url = reverse_lazy('profiles:login')
 
-class SerieListview(ListView):
+class SerieListview(LoginRequiredMixin,ListView):
     model = models.Serie
+    login_url = reverse_lazy('profiles:login')
 
-class SerieDetailView(DetailView):
+class SerieDetailView(LoginRequiredMixin,DetailView):
     model = models.Serie
-class SerieCreateView(CreateView):
+    login_url = reverse_lazy('profiles:login')
+class SerieCreateView(LoginRequiredMixin,CreateView):
     model = models.Serie
     form_class = forms.SerieCreateForm
-class SerieUpdateView(UpdateView):
+    login_url = reverse_lazy('profiles:login')
+class SerieUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Serie
     form_class = forms.SerieCreateForm
-class SerieDeleteView(DeleteView):
+    login_url = reverse_lazy('profiles:login')
+class SerieDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Serie
     success_url = reverse_lazy('directories:series_list')
+    login_url = reverse_lazy('profiles:login')
 
-class GenreListView(ListView):
+class GenreListView(LoginRequiredMixin,ListView):
     model = models.Genre
+    login_url = reverse_lazy('profiles:login')
 
-class GenreDetailView(DetailView):
+class GenreDetailView(LoginRequiredMixin,DetailView):
     model = models.Genre  
-class GenreCreateView(CreateView):
-    model = models.Genre  
-    form_class = forms.GenreCreateForm
-class GenreUpdateView(UpdateView):
+    login_url = reverse_lazy('profiles:login')
+class GenreCreateView(LoginRequiredMixin,CreateView):
     model = models.Genre  
     form_class = forms.GenreCreateForm
-class GenreDeleteView(DeleteView):
+    login_url = reverse_lazy('profiles:login')
+class GenreUpdateView(LoginRequiredMixin,UpdateView):
+    model = models.Genre  
+    form_class = forms.GenreCreateForm
+    login_url = reverse_lazy('profiles:login')
+class GenreDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Genre
     success_url = reverse_lazy('directories:genre_list')
+    login_url = reverse_lazy('profiles:login')
 
 
 

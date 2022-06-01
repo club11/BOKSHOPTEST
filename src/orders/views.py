@@ -16,6 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CreateOrderView(FormView):
     form_class = forms.OrderCreateForm
@@ -90,10 +91,11 @@ class CreateOrderView(FormView):
         )       
         context['object'] = cart
         return context 
-class ListOrderView(ListView):
+class ListOrderView(LoginRequiredMixin,ListView):
     model = models.Order
     template_name = 'orders/list_order.html'
     paginate_by = 30
+    login_url = reverse_lazy('profiles:login')
 
 class OrderDetailView(DetailView):
     model = models.Order
@@ -139,10 +141,11 @@ class OrderStatusUpdateView(View):
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
 
 
-class MyListOrderView(ListView):
+class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order
     template_name = 'orders/list_order.html'
     paginate_by = 30
+    login_url = reverse_lazy('profiles:login')
 
     def get_queryset(self):
         username = self.request.user.get_username()

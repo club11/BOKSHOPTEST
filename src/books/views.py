@@ -9,7 +9,7 @@ from . import models
 from . import forms
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView, FormView, TemplateView
 from django.urls import reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 class HomeTemplateView(ListView):
     model = models.Book
     form_class = forms.BookForm
@@ -23,9 +23,7 @@ class HomeTemplateView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)        # last 3 added books got here from filter in get_queryset function on step before
         queryset = super().get_queryset()
-        context['recomended'] = queryset.reverse().order_by('price')[ : 3]
-        print(context['recomended'])
-        print(context)        
+        context['recomended'] = queryset.reverse().order_by('price')[ : 3]     
         return context
 
 class BookasGoodsListView(ListView):
@@ -49,22 +47,26 @@ class BookDetailView(DetailView):
         context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
         return context
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin,CreateView):
     model = models.Book
     form_class = forms.BookForm
+    login_url = reverse_lazy('profiles:login')
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin,DeleteView):
     model = models.Book
     success_url = reverse_lazy('books:book_list')
+    login_url = reverse_lazy('profiles:login')
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin,UpdateView):
     model = models.Book
     form_class = forms.BookForm
     template_name = 'books/book_update.html'
     success_url = reverse_lazy('books:book_list')
+    login_url = reverse_lazy('profiles:login')
 
-class BookListView(ListView):
+class BookListView(LoginRequiredMixin,ListView):
     model = models.Book
+    login_url = reverse_lazy('profiles:login')
 
     def get_queryset(self):                                 # поиск по книгам | авторам
         queryset = super().get_queryset()
@@ -82,17 +84,17 @@ class BookListView(ListView):
 
 ##############################################################################################
 #доработать рейтинг
-class AddStarRaing(View):
-    # добавление рейтинга к книге
-    #def get_client_ip(self, request):
-    def post(self, request):
-        form = forms.RatingForm(request.POST)
-        if form.is_valid():
-            models.Rating.objects.update_or_create(
-                book_id=int(request.POST.get('book')),
-                defaults={'star_id': int(request.pOST.get('star'))}
-            )
-            return HttpResponse(status=201)
-        else:
-            return HttpResponse(status=400)
+#class AddStarRaing(View):
+#    # добавление рейтинга к книге
+#    #def get_client_ip(self, request):
+#    def post(self, request):
+#        form = forms.RatingForm(request.POST)
+#        if form.is_valid():
+#            models.Rating.objects.update_or_create(
+#                book_id=int(request.POST.get('book')),
+#                defaults={'star_id': int(request.pOST.get('star'))}
+#            )
+#            return HttpResponse(status=201)
+#        else:
+#            return HttpResponse(status=400)
 #################################################################################################

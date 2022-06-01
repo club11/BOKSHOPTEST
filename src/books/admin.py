@@ -28,17 +28,17 @@ class BookAdmin(admin.ModelAdmin):
 
 ####################################################
 #доработать рейтинг
-class RatingStarAdmin(admin.ModelAdmin):
-    list_display= [
-        'value'
-    ]
-
-class RatingAdmin(admin.ModelAdmin):
-    list_display= [
-        'star'
-    ]
-#######################################################
+#class RatingStarAdmin(admin.ModelAdmin):
+#    list_display= [
+#        'value'
+#    ]
+#
+#class RatingAdmin(admin.ModelAdmin):
+#    list_display= [
+#        'star'
+#    ]
+########################################################
 
 admin.site.register(models.Book, BookAdmin)
-admin.site.register(models.RatingStar, RatingStarAdmin)
-admin.site.register(models.Rating, RatingAdmin)
+#admin.site.register(models.RatingStar, RatingStarAdmin)
+#admin.site.register(models.Rating, RatingAdmin)
