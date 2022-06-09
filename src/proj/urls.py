@@ -30,6 +30,7 @@ urlpatterns = [
     path('order/', include('orders.urls', namespace='orders')), 
     path('profiles/', include('profiles.urls', namespace='profiles')), 
     path('comments/', include('comments.urls', namespace='comments')), 
+    path('staff/', include('staff.urls', namespace='staff')), 
 ] 
 
 if settings.DEBUG:

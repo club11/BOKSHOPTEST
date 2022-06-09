@@ -18,6 +18,9 @@
           <li class="nav-item">
             <a class="nav-link"  href="{% url 'orders:list_order' %}">Список заказов</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="{% url 'staff:excel_import' %}">Импорт файлов</a>
+          </li>
           {% endif %}
         </li>
       {% endfor %}

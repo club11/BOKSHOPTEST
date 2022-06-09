@@ -4,12 +4,14 @@ from django.shortcuts import render
 from django.views import View
 from django.db.models import Q          #импорт Q-object
 
-# Create your views here.
 from . import models
 from . import forms
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView, FormView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
 class HomeTemplateView(ListView):
     model = models.Book
     form_class = forms.BookForm
@@ -42,10 +44,10 @@ class BookDetailView(DetailView):
     model = models.Book
     template = 'book_detail.html'
 
-    def get_context_data(self, **kwargs):
-        context =  super().get_context_data(**kwargs)
-        context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
-        return context
+    #def get_context_data(self, **kwargs):
+    #    context =  super().get_context_data(**kwargs)
+    #    context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
+    #    return context
 
 class BookCreateView(LoginRequiredMixin,CreateView):
     model = models.Book

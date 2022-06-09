@@ -2,6 +2,8 @@
 {% block title %} Home {% endblock title %}
 {% block body %}
 <h1>Club11 book shop</h1>
+
+
 <table class="table">
   <thead>
     <tr>
@@ -13,7 +15,7 @@
       {% for object in object_list %}
       <td>
         <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-          <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
+          <img src='{{ object.picture.url }}' class="card-img-top" alt="... ">
           <div class="card-body">
             <h5 class="card-title" style="color:#FFFF00"> <b>{{ object.book_name }}</b></h5> 
             <p class="card-text"> 

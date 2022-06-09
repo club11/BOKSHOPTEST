@@ -89,7 +89,7 @@ class Book(models.Model):
     )
     available = models.BooleanField(
         verbose_name='доступен для заказа',
-        default=None,
+        default=True,
     )
     publication_date = models.DateTimeField(
         verbose_name='Дата внесения в каталог',

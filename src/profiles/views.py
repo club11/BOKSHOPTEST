@@ -12,7 +12,6 @@ from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from profiles.models import User, Profile
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
-
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
     next_page = reverse_lazy('profiles:profile_user')
@@ -24,7 +23,8 @@ class UserLoginView(LoginView):
             staff_group = user.groups.get(name = 'staff')
             if staff_group.name == 'staff':
                 return reverse_lazy('books:book_list')                  # ПЕРЕНАПРАВИТ здесь
-        return super().get_success_url()
+        #return super().get_success_url()
+        return reverse_lazy('profiles:profile_user')
 
 class RegisterFormView(FormView):
     template_name = 'profiles/register_user.html'
