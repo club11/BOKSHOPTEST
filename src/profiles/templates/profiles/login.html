@@ -1,18 +1,20 @@
+<style>
+
+</style>
 {% extends 'base.html' %}
 {% block title %} Login {% endblock title %}
 {% block body %}
 
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<p>Ваш логин либо пароль введены некорректно. Пожалуйста, попробуйте снова.</p>
 {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
+    <p>Ваш аакаунт не имеет доступа к данной странице. Чтобы продолжить, зайдите под другим аккаунтом, обладающим правами доступа.</p>
     {% else %}
-    <p>Please login to see this page.</p>
+    <p>Пожалуйста, залогиньтесь, чтобы посмотреть данную страницу.</p>
     {% endif %}
 {% endif %}
 
@@ -28,7 +30,7 @@
     <td>{{ form.password }}</td>
 </tr>
 </table>
-<input type="submit" value="login">
+<input type="submit" value="Войти">
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 

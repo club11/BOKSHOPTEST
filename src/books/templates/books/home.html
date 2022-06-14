@@ -1,8 +1,66 @@
 {% extends 'base.html' %}
 {% block title %} Home {% endblock title %}
 {% block body %}
-<h1>Club11 book shop</h1>
+<div class="container">
+  <div class="row">
+    <div class="col"><h3>Новинки</h3></div>
+  </div>
+  <div class="row">
+    {% for object in object_list %}
+    <div class="col-lg-4 d-flex align-items-stretch">
+      <div class="card text-white bg-dark mb-3" style="max-width: 18rem; max-height: fit-content;">
+        <img src='{{ object.picture.url }}' class="card-img-top" alt="... ">
+        <div class="card-body">
+          <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
+          <p class="card-text"> 
+            Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
+            Серия: {{ object.serie }}</br>
+            Жанр: {{ object.genre }}</br>
+            Кол-во страниц: <b>{{ object.pages }}</b></br>
+            Формат: {{ object.format }}</br>
+            Количество в наличии: {{ object.value_available }}</br>
+            Доступен для заказа: <b>{{ object.available }}</b></br>
+            Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
+            <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+        </p>
+          <a href="{% url 'books:book' object.pk %}" class="btn btn-success">Подробнее</a>    
+          <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-warning">В корзину</a>  
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="col"><h3>Рекомедуемые</h3></div>
+  </div>
+  <div class="row">
+    {% for object in recomended  %}
+    <div class="col-lg-4 d-flex align-items-stretch">
+      <div class="card text-white bg-dark mb-3" style="max-width: 18rem; max-height: fit-content;">
+        <img src='{{ object.picture.url }}' class="card-img-top" alt="... ">
+        <div class="card-body">
+          <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
+          <p class="card-text"> 
+            Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
+            Серия: {{ object.serie }}</br>
+            Жанр: {{ object.genre }}</br>
+            Кол-во страниц: <b>{{ object.pages }}</b></br>
+            Формат: {{ object.format }}</br>
+            Количество в наличии: {{ object.value_available }}</br>
+            Доступен для заказа: <b>{{ object.available }}</b></br>
+            Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
+            <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+        </p>
+          <a href="{% url 'books:book' object.pk %}" class="btn btn-success">Подробнее</a>    
+          <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-warning">В корзину</a>  
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
+{% endblock body %}
 
 <table class="table">
   <thead>
@@ -14,12 +72,12 @@
     <tr>
       {% for object in object_list %}
       <td>
-        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+        <div class="card text-white bg-dark mb-3" style="max-width: 18rem; max-height: fit-content;">
           <img src='{{ object.picture.url }}' class="card-img-top" alt="... ">
           <div class="card-body">
-            <h5 class="card-title" style="color:#FFFF00"> <b>{{ object.book_name }}</b></h5> 
+            <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
             <p class="card-text"> 
-              Автор: <b style="color:#FFFF00">{{ object.author }}</b></br>  
+              Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
               Серия: {{ object.serie }}</br>
               Жанр: {{ object.genre }}</br>
               Кол-во страниц: <b>{{ object.pages }}</b></br>
@@ -49,9 +107,9 @@
         <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
           <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title" style="color:#FFFF00"> <b>{{ recomended.book_name }}</b></h5> 
+            <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
             <p class="card-text"> 
-              Автор: <b style="color:#FFFF00">{{ object.author }}</b></br>  
+              Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
               Серия: {{ object.serie }}</br>
               Жанр: {{ object.genre }}</br>
               Кол-во страниц: <b>{{ object.pages }}</b></br>
@@ -70,5 +128,3 @@
     </tr>
   </tbody>
 </table>
-{% endblock body %}
-

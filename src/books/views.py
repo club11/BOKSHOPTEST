@@ -31,7 +31,7 @@ class HomeTemplateView(ListView):
 class BookasGoodsListView(ListView):
     model = models.Book
     template_name =  'books/book_goods_list.html'
-    paginate_by = 4
+    paginate_by = 12
 
     def get_queryset(self):                                 # поиск по книгам | авторам
         queryset = super().get_queryset()
