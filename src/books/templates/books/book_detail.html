@@ -2,35 +2,41 @@
 {% load template_tags %}
 {% block title %} Book detail {% endblock title %}
 {% block body %}
-<div class="card text-white bg-dark mb-3 d-flex align-items-stretch" style="max-width: 18rem;">
-    <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
-      <p class="card-text"> 
-        Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
-        Серия: {{ object.serie }}</br>
-        Жанр: {{ object.genre }}</br>
-        Издатель: {{ object.editor }} </br>
-        Год издания: {{ object.publishing_date }} </br>
-        Кол-во страниц: <b>{{ object.pages }}</b></br>
-        Переплет: <b>{{ object.binding }}</b></br>
-        Формат: {{ object.format }}</br>
-        ISBN: {{ object.isbn }}</br>
-        Вес: {{ object.weigh }}</br>
-        Возрастные ограничения: {{ object.age_restrictions }}</br>
-        Количество в наличии: {{ object.value_available }}</br>
-        Доступен для заказа: <b>  {% if object.available is True %}
-                                  Да
-                                  {% else %}
-                                  Нет
-                                  {% endif %}</br>
-        Рейтинг: <b>{{ object.rating }}</b></br>
-        <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
-        <br>
-        Дата внесения в каталог: {{ object.publication_date }}</br>
-        Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>   
-    </p>
-      <a href="{% url 'books:book_list' %}" class="btn btn-light">Назад к списку</a>
+<div class="card text-white bg-dark w-75 p-3">
+  
+    <div class="card-horizontal">
+        <div class="img-square-wrapper">
+          <img src='{{ object.picture.url }}' class="card-img-top w-100 p-2" alt="...">
+        </div>
+
+      <div class="card-body">
+        <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
+        <p class="card-text"> 
+          Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
+          Серия: {{ object.serie }}</br>
+          Жанр: {{ object.genre }}</br>
+          Издатель: {{ object.editor }} </br>
+          Год издания: {{ object.publishing_date }} </br>
+          Кол-во страниц: <b>{{ object.pages }}</b></br>
+          Переплет: <b>{{ object.binding }}</b></br>
+          Формат: {{ object.format }}</br>
+          ISBN: {{ object.isbn }}</br>
+          Вес: {{ object.weigh }}</br>
+          Возрастные ограничения: {{ object.age_restrictions }}</br>
+          Количество в наличии: {{ object.value_available }}</br>
+          Доступен для заказа: <b>  {% if object.available is True %}
+                                    Да
+                                    {% else %}
+                                    Нет
+                                    {% endif %}</br>
+          Рейтинг: <b>{{ object.rating }}</b></br>
+          <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+          <br>
+          Дата внесения в каталог: {{ object.publication_date }}</br>
+          Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>   
+      </p>
+        <a href="{% url 'books:book_goods_list' %}" class="btn btn-light">Назад</a>
+      </div>
     </div>
   </div>
 
@@ -59,3 +65,35 @@
     {% endfor %}
   </span>
 </form>
+
+<div class="card text-white bg-dark mb-3 d-flex align-items-stretch">
+  <img src='{{ object.picture.url }}' class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
+    <p class="card-text"> 
+      Автор: <b style="color:#fafaf4">{{ object.author }}</b></br>  
+      Серия: {{ object.serie }}</br>
+      Жанр: {{ object.genre }}</br>
+      Издатель: {{ object.editor }} </br>
+      Год издания: {{ object.publishing_date }} </br>
+      Кол-во страниц: <b>{{ object.pages }}</b></br>
+      Переплет: <b>{{ object.binding }}</b></br>
+      Формат: {{ object.format }}</br>
+      ISBN: {{ object.isbn }}</br>
+      Вес: {{ object.weigh }}</br>
+      Возрастные ограничения: {{ object.age_restrictions }}</br>
+      Количество в наличии: {{ object.value_available }}</br>
+      Доступен для заказа: <b>  {% if object.available is True %}
+                                Да
+                                {% else %}
+                                Нет
+                                {% endif %}</br>
+      Рейтинг: <b>{{ object.rating }}</b></br>
+      <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
+      <br>
+      Дата внесения в каталог: {{ object.publication_date }}</br>
+      Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>   
+  </p>
+    <a href="{% url 'books:book_list' %}" class="btn btn-light">Назад</a>
+  </div>
+</div>

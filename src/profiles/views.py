@@ -9,6 +9,7 @@ from . import forms
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
+from django.views.generic import DetailView
 from profiles.models import User, Profile
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
@@ -107,3 +108,6 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = 'profiles/password_change_form.html'
     success_url = reverse_lazy('profiles:profile_user')
 
+class UserDataDetaiView(DetailView):
+    model = models.Profile
+    template_name = 'profiles/profile_data.html'

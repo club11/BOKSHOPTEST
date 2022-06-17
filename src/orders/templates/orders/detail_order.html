@@ -2,11 +2,10 @@
 {#   {% load crispy_forms_tags %} #}
 {% block title %} Order detail {% endblock title %}
 {% block body %}
-<h2>Детали заказа</h2>
+<h2>Детали заказа # {{ object.pk }}</h2>
 
 <h3>пользователь: {{ order.contact_info }}</h3>
-<h4>контактные данные заказчика: {{ order.tel }}</h4>
-<h3>номер заказа: {{ object.pk }}</h3>
+<h5>контактные данные заказчика: {{ order.tel }}</h5>
 <table class="table table-dark table-hover">
     <thead>
       <tr>

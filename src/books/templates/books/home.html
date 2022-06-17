@@ -23,6 +23,8 @@
             Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
             <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
         </p>
+        </div>
+        <div class="card-footer">
           <a href="{% url 'books:book' object.pk %}" class="btn btn-success">Подробнее</a>    
           <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-warning">В корзину</a>  
         </div>
@@ -51,6 +53,8 @@
             Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
             <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
         </p>
+        </div>
+        <div class="card-footer">
           <a href="{% url 'books:book' object.pk %}" class="btn btn-success">Подробнее</a>    
           <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-warning">В корзину</a>  
         </div>

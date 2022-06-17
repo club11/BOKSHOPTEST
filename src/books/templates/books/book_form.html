@@ -7,7 +7,7 @@
 <form action="" method="post" enctype="multipart/form-data">
   {% csrf_token %} 
   {{ form.as_p }}
-    <button type="submit">Submit</button>
+    <button type="submit">Принять</button>
 </form>
 <a href="{% url 'books:book_list' %}" class="btn btn-light">Назад к списку</a>
 {% endblock body %}

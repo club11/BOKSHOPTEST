@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q 
 
 class CreateOrderView(FormView):
     form_class = forms.OrderCreateForm
@@ -97,6 +98,32 @@ class ListOrderView(LoginRequiredMixin,ListView):
     paginate_by = 30
     login_url = reverse_lazy('profiles:login')
 
+    def get_queryset(self):                                 # поиск по заказчику
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        print(q, 'XXXXXXXXX')
+        if q:
+            queryset = queryset.filter(Q(contact_info__icontains=q))     
+        return queryset  
+            
+    def get_context_data(self, **kwargs):
+        q = self.request.GET.get('q')
+        context = super().get_context_data(**kwargs)
+        context['search_request'] = q
+        return context 
+
+
+    def render_to_response(self, context, **response_kwargs):
+        response = super().render_to_response(context, **response_kwargs)
+        order_contact_info = self.request.GET.get('profile')
+        if order_contact_info is None:
+            pass
+        elif order_contact_info:
+            get_user = User.objects.get(username=order_contact_info)
+            get_user_profile = profiles_models.Profile.objects.get(user=get_user)
+            return HttpResponseRedirect(reverse_lazy('profiles:profile_data', args=[get_user_profile.pk]))
+        return response
+
 class OrderDetailView(DetailView):
     model = models.Order
     template_name = 'orders/detail_order.html'
@@ -139,8 +166,6 @@ class OrderStatusUpdateView(View):
                         fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
                     )
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
-
-
 class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order
     template_name = 'orders/list_order.html'
@@ -154,5 +179,19 @@ class MyListOrderView(LoginRequiredMixin,ListView):
         queryset = order
         return queryset
 
-
-
+#class UserListOrderView(LoginRequiredMixin,ListView):
+#    model = models.Order
+#    template_name = 'orders/list_order.html'
+#    paginate_by = 30
+#    login_url = reverse_lazy('profiles:login')
+#
+#    def get_queryset(self):
+#        queryset = super().get_queryset()
+#        get_adress = self.request.get_full_path_info()
+#        user_id_str = get_adress.split('/')
+#        for i in user_id_str:
+#            if i.isdigit():
+#                user_id = int(i)
+#                profile = models.Profile.objects.get(pk=3)
+#                print(profile.user)
+#        return queryset

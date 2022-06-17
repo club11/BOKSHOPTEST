@@ -29,8 +29,8 @@
         <td><a href="{% url 'books:book_delete' book.pk %}">Delete</a></td>
       </tr>
         {% endfor %}
-
-        <button type="submit" class="btn btn-light"><a href="{% url 'books:book_create' %}">Создать книгу</a></button>
+        <a href="{% url 'books:book_create' %}" class="btn btn-light">Создать книгу</a>
     </tbody>
   </table>
 {% endblock body %}
+s

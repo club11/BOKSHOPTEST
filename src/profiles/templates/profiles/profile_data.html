@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock title %}
+{% block body %}
+<h1>Профиль  <b style="color:#fafaf4">{{ object.user }}</b></h1>
+<div class="card text-white bg-dark w-75 p-3">
+    <div class="card text-white bg-dark mb-3">
+      <div class="card-body">
+        <p class="card-text"> 
+          номер телефона {{ object.tel }}</br>
+          email: {{ object.email }}</br>
+          имя: {{ object.first_name }} </br>
+          фамилия: {{ object.last_name}} </br>
+          город: <b>{{ object.country }}</b></br>
+          город: {{ object.city }}</br>
+          индекс: {{ object.index }}</br>
+          адрес {{ object.adress }}</br>
+          Дата регистрации: {{ object.publication_date }}</br>
+      </p>
+        <a href="{% url 'orders:list_order' %}" class="btn btn-light">Назад</a>
+      </div>
+    </div>
+  </div>
+  {% endblock body %}

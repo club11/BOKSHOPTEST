@@ -9,6 +9,6 @@ urlpatterns = [
     path('logout/', profile_views.UserLogoutView.as_view(), name='logout'), 
     path('profile_user/', profile_views.UpdateRegisterView.as_view(), name='profile_user'),
     path('password_change_form/', profile_views.UserPasswordChangeView.as_view(), name='password_change'),  
-
-
+    path('profile_data/<int:pk>/', profile_views.UserDataDetaiView.as_view(), name='profile_data'),
 ]
+

@@ -4,6 +4,8 @@
 
 {% include '../search.html' %}
 
+<button type="submit"><a href="{% url 'books:book_goods_list' %}" class="btn btn-light">сбросить</a></button>
+
 <div class="container">
   <div class="row row-cols-4">
     {% for object in page_obj %}
@@ -23,10 +25,11 @@
                 Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
                 <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
             </p>
-              <div><a href="{% url 'books:book' object.pk %}" class="btn-sm btn-success">Подробнее</a>    
-              <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn-sm btn-warning">В корзину</a>
             </div>
-            </div>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'books:book' object.pk %}" class="btn btn-success">Подробнее</a>    
+            <a href="{% url 'carts:cart'%}?book_id={{object.pk}}" class="btn btn-warning">В корзину</a>  
           </div>
         </div>
       </div>
@@ -35,8 +38,8 @@
   </div>
 </div>
 {% include '../paginator.html' %}
-
 {% endblock body %}
+
 
 
 
@@ -44,3 +47,4 @@
 
 {# {{ page_obj }}  --- список для пагинации #}
 
+{% include '../search_by_name.html' %}#}

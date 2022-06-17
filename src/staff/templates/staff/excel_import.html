@@ -1,3 +1,11 @@
+<style>
+  form{
+     position:fixed;
+     top:40%;
+     left:40%;
+      }
+  </style>
+  
 {% extends 'base.html' %}
 {% block title %} Excel import {% endblock title %}
 {% block body %}
@@ -5,7 +13,7 @@ Staff only
 
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %} 
-    {{ form }}
+    {{ form.as_ul}}
       <button type="submit">Импортировать</button>
   </form>
   <a href="{% url 'books:home' %}" class="btn btn-light">На главную</a>

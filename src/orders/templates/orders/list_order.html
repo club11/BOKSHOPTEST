@@ -3,10 +3,19 @@
 {% block title %} Order list {% endblock title %}
 {% block body %}
 
+{% if search_request %}
+<h3>результат поиска по запросу: "{{ search_request }}"</h3>
+{% endif %}
+<form action="{% url 'orders:list_order' %}" method="get">
+  <input type="text" name="q">
+  <button type="submit">Поиск</button>
+</form>
+
+
 <table class="table">
     <thead>
       <tr>
-        <th scope="col"># заказа</th>
+        <th scope="col"># заказа / информация</th>
         <th scope="col">пользователь</th>
         <th scope="col">контактные данные заказчика</th>        
         <th scope="col">заказ создан</th>
@@ -17,8 +26,8 @@
     <tbody>
         {% for order in object_list %}
       <tr>
-        <td><a href="{% url 'orders:detail_order' order.pk  %}">{{ order.pk }} </a></td>
-        <td>{{ order.contact_info }}</td>  
+        <td><a href="{% url 'orders:detail_order' order.pk  %}"> {{ order.pk }}. подробнее </a></td> 
+        <td><a href="?profile={{ order.contact_info }}">{{ order.contact_info }}</a></td>  
         <td>{{ order.tel}}</td>          
         <td>{{ order.created }}</td>
         <td>{{ order.updated }}</td>
@@ -29,6 +38,6 @@
   </table>
   {% include '../paginator.html' %} 
 {% endblock body %}
-{{ order.cart.pk }}
+
 
 

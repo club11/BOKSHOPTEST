@@ -1,4 +1,35 @@
+<style>
+  .pagination > li > a
+{
+    background-color: rgb(10, 10, 10);
+    color: #f6f5f8; 
+    border:  #000000 !Important;
+}
 
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: #f5f1f1;
+    background-color: #000000;
+    border-color: #000000; 
+    border:  #000000 !Important;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: #000000 !Important;
+    border:  #000000 !Important;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #161515 !Important;
+    border: solid 1px #000000;
+}
+</style>
 
 <nav aria-label="...">
     <ul class="pagination justify-content-center">
@@ -7,7 +38,9 @@
         <a class="page-link" href="?page=1">начало</a>
       </li>
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">назад</a>
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="назад">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only"></span></a>
       </li>
       <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
       {% endif %}
@@ -19,7 +52,9 @@
       {% if page_obj.has_next %}
       <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
       <li class="page-item ">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">вперед</a>
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="вперед">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only"></span></a>
       </li>
       <li class="page-item pagination-sm">
         <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">последняя</a>
