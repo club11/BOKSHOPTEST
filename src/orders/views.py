@@ -124,10 +124,10 @@ class ListOrderView(LoginRequiredMixin,ListView):
             return HttpResponseRedirect(reverse_lazy('profiles:profile_data', args=[get_user_profile.pk]))
         return response
 
-class OrderDetailView(DetailView):
+class OrderDetailView(LoginRequiredMixin,DetailView):
     model = models.Order
     template_name = 'orders/detail_order.html'
-    success_url = reverse_lazy('orders:list_order')
+    #success_url = reverse_lazy('orders:list_order')
 
 class OrderStatusUpdateView(View):
     #def post(self, request, pk):
@@ -165,6 +165,8 @@ class OrderStatusUpdateView(View):
                         [user_email],                       # получатель
                         fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
                     )
+                    print(user_email, 'SSSSSSSSSSSSSSSSSSSSSSSSS')
+                    messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email}')
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
 class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order

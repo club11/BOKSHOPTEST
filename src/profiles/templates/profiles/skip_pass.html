@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock title %}
+{% block body %}
+<h1>Сменить пароль</h1>
+<div>Введите ваш e-mail, на который будет выслана информация для восстановления пароля.</div>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class=" btn btn-success">Отправить</button>
+{% endblock body %}
+
+
+
+

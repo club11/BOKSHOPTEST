@@ -35,7 +35,7 @@
           Дата внесения в каталог: {{ object.publication_date }}</br>
           Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>   
       </p>
-        <a href="{% url 'books:book_goods_list' %}" class="btn btn-light">Назад</a>
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light">Назад</a>
       </div>
     </div>
   </div>

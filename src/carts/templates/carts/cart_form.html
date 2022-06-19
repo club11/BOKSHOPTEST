@@ -38,6 +38,7 @@
   </table>
   <button type="submit" bbt class="btn btn-warning" name="submit" value="save_cart">Сохранить корзину</button>
   <button type="submit" bbt class="btn btn-success" name="submit" value="create_order">Сохранить корзину и заказать</button>
+  <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light">Назад</a>
 </form>
 
 {% endblock body %}

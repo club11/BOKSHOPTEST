@@ -16,7 +16,7 @@
           адрес {{ object.adress }}</br>
           Дата регистрации: {{ object.publication_date }}</br>
       </p>
-        <a href="{% url 'orders:list_order' %}" class="btn btn-light">Назад</a>
+      <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light">Назад</a>
       </div>
     </div>
   </div>

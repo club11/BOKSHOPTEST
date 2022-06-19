@@ -2,6 +2,7 @@
 {% block title %} Author detail {% endblock title %}
 {% block body %} 
 {{ object }}
+<a href="{% url 'directories:author_list' %}" class="btn btn-light">Назад</a>
 {% endblock body %}
 
 

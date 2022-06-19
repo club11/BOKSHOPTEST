@@ -2,4 +2,5 @@
 {% block title %} Editor detail{% endblock title %}
 {% block body %} 
     {{ editor }}
+    <a href="{% url 'directories:editor_list' %}" class="btn btn-light">Назад</a>
 {% endblock body %}

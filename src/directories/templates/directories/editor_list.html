@@ -1,12 +1,26 @@
 {% extends 'base.html' %}
 {% block title %} Editor list {% endblock title %}
 {% block body %} 
-    <ul>
-    {% for editor in editor_list %}
-    <li>{{ forloop.counter }}. <a href="{% url 'directories:editor' editor.pk  %}"> {{ editor }} </a>
-        || <a href="{% url 'directories:editor_update' editor.pk  %}">Update</a>
-        || <a href="{% url 'directories:editor_delete' editor.pk  %}">Delete</a></li>
-    {% endfor %}
-    </ul>
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Detail</th>
+          <th scope="col">Update</th>
+          <th scope="col">Delete</th>
+        </tr>
+    </thead>  
+    <tbody>
+        {% for editor  in object_list %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td><a href="{% url 'directories:editor' editor.pk  %}"> {{ editor }} </a></td>
+          <td><a href="{% url 'directories:editor_update' editor.pk  %}">Update</a></td>
+          <td><a href="{% url 'directories:editor_delete' editor.pk  %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>      
+</table>
     <button type="submit"><a href="{% url 'directories:editor_create'  %}" >Create</a></button>
+    <a href="{% url 'directories:directories' %}" class="btn btn-light">Назад</a>
 {% endblock body %}

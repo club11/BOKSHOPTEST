@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
 {% block title %} Genre list {% endblock title %}
 {% block body %} 
-    <ul>
-    {% for genre in genre_list %}
-    <li>{{ forloop.counter }}. <a href="{% url 'directories:genre' genre.pk  %}"> {{genre }} </a>
-        || <a href="{% url 'directories:genre_update' genre.pk  %}">Update</a>
-        || <a href="{% url 'directories:genre_delete' genre.pk  %}">Delete</a></li>
-    {% endfor %}
-    </ul>
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Detail</th>
+          <th scope="col">Update</th>
+          <th scope="col">Delete</th>
+        </tr>
+    </thead>  
+    <tbody>
+        {% for genre in genre_list %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td><a href="{% url 'directories:genre' genre.pk  %}"> {{genre }} </a></td>
+          <td><a href="{% url 'directories:genre_update' genre.pk  %}">Update</a></td>
+          <td><a href="{% url 'directories:genre_delete' genre.pk  %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>      
+</table>
     <button><a href="{% url 'directories:genre_create' %}">Создать жанр?</a></button>
+    <a href="{% url 'directories:directories' %}" class="btn btn-light">Назад</a>
 {% endblock body %}
 
 

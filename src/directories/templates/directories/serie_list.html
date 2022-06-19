@@ -1,14 +1,28 @@
 {% extends 'base.html' %}
 {% block title %} Serie list {% endblock title %}
 {% block body %} 
-    <ul>
-    {% for object in serie_list %}
-    <li>{{ forloop.counter }}. <a href="{% url 'directories:serie' object.pk %}"> {{ object }}</a> 
-        <a href="{% url 'directories:serie_update' object.pk %}">Update</a>
-        <a href="{% url 'directories:serie_delete' object.pk %}">Delete</a></li> </li>        {#'series' - is name from  path('sssssserie_detail/<int:serie_id>/', directories_views.serie_detail, name='series'),  some_serie.pk  - object#}
-    {% endfor %}
-    </ul>
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Detail</th>
+          <th scope="col">Update</th>
+          <th scope="col">Delete</th>
+        </tr>
+    </thead>  
+    <tbody>
+        {% for object in serie_list %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td><a href="{% url 'directories:serie' object.pk %}"> {{ object }} </a></td>
+          <td><a href="{% url 'directories:serie_update' object.pk %}">Update</a></td>
+          <td><a href="{% url 'directories:serie_delete' object.pk %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>      
+</table>
     <button type="submit"><a href="{% url 'directories:serie_create'  %}" >Create</a></button>
+    <a href="{% url 'directories:directories' %}" class="btn btn-light">Назад</a>
 {% endblock body %}
 
 

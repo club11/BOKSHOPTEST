@@ -1,5 +1,7 @@
+from dataclasses import fields
 from email.headerregistry import Group
 from itertools import count
+from pipes import Template
 from pyexpat import model
 from unicodedata import name
 from django.views.generic import FormView
@@ -12,10 +14,14 @@ from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from django.views.generic import DetailView
 from profiles.models import User, Profile
 from django.contrib.auth.models import Group, Permission
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.mail import send_mail
+import string
+import random
+from django.contrib import messages
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
-    next_page = reverse_lazy('profiles:profile_user')
+    next_page = next
 
     def get_success_url(self):                                                  # перенаправить юзера staff на иную страницу
         user = self.request.user
@@ -26,6 +32,7 @@ class UserLoginView(LoginView):
                 return reverse_lazy('books:book_list')                  # ПЕРЕНАПРАВИТ здесь
         #return super().get_success_url()
         return reverse_lazy('profiles:profile_user')
+
 
 class RegisterFormView(FormView):
     template_name = 'profiles/register_user.html'
@@ -101,7 +108,18 @@ class UpdateRegisterView(FormView):
         user.username = username
         user.save()
         ###############
-        profile = Profile.objects.update(tel=tel, email=email, first_name=first_name, last_name=last_name, country=country, city=city, index=index, adress=adress)
+        current_user = self.request.user
+        get_profile = Profile.objects.get(user=current_user)
+        get_profile.tel=tel
+        get_profile.email=email
+        get_profile.first_name=first_name 
+        get_profile.last_name=last_name 
+        get_profile.country=country
+        get_profile.city=city
+        get_profile.index=index 
+        get_profile.adress=adress
+        get_profile.save()
+        #profile = Profile.objects.update(tel=tel, email=email, first_name=first_name, last_name=last_name, country=country, city=city, index=index, adress=adress)
         return super().form_valid(form)
 
 class UserPasswordChangeView(PasswordChangeView):
@@ -111,3 +129,35 @@ class UserPasswordChangeView(PasswordChangeView):
 class UserDataDetaiView(DetailView):
     model = models.Profile
     template_name = 'profiles/profile_data.html'
+
+class UserPassordMailView(FormView):
+    template_name = 'profiles/skip_pass.html'
+    form_class = forms.UserPassordMailForm
+    success_url = reverse_lazy('profiles:login')
+
+    def form_valid(self, form):
+        email_adress = form.cleaned_data.get('email')
+        profile = models.Profile.objects.get(email=email_adress)
+        user = User.objects.get(username=profile.user)
+        ################# generate random password
+        characters = list(string.ascii_letters + string.digits + "!@#$%^&*()")
+        length = 8
+        random.shuffle(characters)
+        password = []
+        for i in range(length):
+            password.append(random.choice(characters))
+        random.shuffle(password)
+        #################
+        #print("".join(password))
+        user.set_password("".join(password))
+        user.save()
+        #print(user.password)
+        send_mail(      
+            'поступил запрос на изменения пароля',                     # строка от сабжэкт
+            f'Ваш пароль к аккаунту {user.username} в изменен на {"".join(password)}',                       # строка суть письма - в данном случае адресс на заказ (ДОРАБОТАТЬ ФУЛЛ путь)
+            'club11bookshop@mail.ru',           # отправитель
+            [email_adress],                       # получатель
+            fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
+        )
+        messages.add_message(self.request, messages.INFO, f'Уведомление о смене пароля направлено на Ваш почтовый адресс {email_adress}')
+        return super().form_valid(form)

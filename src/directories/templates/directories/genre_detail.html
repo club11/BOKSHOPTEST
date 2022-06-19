@@ -2,4 +2,5 @@
 {% block title %} Genre detail {% endblock title %}
 {% block body %} 
     {{ genre }}
+    <a href="{% url 'directories:genre_list' %}" class="btn btn-light">Назад</a>
 {% endblock body %}

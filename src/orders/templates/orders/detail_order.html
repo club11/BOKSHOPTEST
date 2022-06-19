@@ -43,7 +43,6 @@
           <button type="submit" class="btn btn-sm btn-danger" name="order" value="{{ object.pk }}">Изменить статус</button>
         </form>
 
-
       </th>  
       </tr> 
       <tr> 
@@ -56,6 +55,7 @@
       <th>{{ order.cart.cart_total_price }}</th>
     </tbody>
 </table>
+<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light">Назад</a>
 {% endblock body %}
 
 
