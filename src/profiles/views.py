@@ -19,6 +19,8 @@ from django.core.mail import send_mail
 import string
 import random
 from django.contrib import messages
+from validators.validators import  ValidationError
+
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
     next_page = next
@@ -32,7 +34,6 @@ class UserLoginView(LoginView):
                 return reverse_lazy('books:book_list')                  # ПЕРЕНАПРАВИТ здесь
         #return super().get_success_url()
         return reverse_lazy('profiles:profile_user')
-
 
 class RegisterFormView(FormView):
     template_name = 'profiles/register_user.html'
@@ -111,13 +112,13 @@ class UpdateRegisterView(FormView):
         current_user = self.request.user
         get_profile = Profile.objects.get(user=current_user)
         get_profile.tel=tel
-        get_profile.email=email
         get_profile.first_name=first_name 
         get_profile.last_name=last_name 
         get_profile.country=country
         get_profile.city=city
         get_profile.index=index 
         get_profile.adress=adress
+        get_profile.email=email
         get_profile.save()
         #profile = Profile.objects.update(tel=tel, email=email, first_name=first_name, last_name=last_name, country=country, city=city, index=index, adress=adress)
         return super().form_valid(form)
