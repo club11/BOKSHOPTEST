@@ -127,7 +127,7 @@ class UpdateRegisterForm(forms.Form):
     last_name = forms.CharField(max_length=20, label='Фамилия', required=False)
     country = forms.CharField(max_length=20, label='Страна', required=False) 
     index  = forms.IntegerField(label='Индекс', required=False)
-    adress = forms.IntegerField(label='Адресс', required=False)
+    adress = forms.CharField(max_length=30, label='Адресс', required=False)
 
     def clean_email(self):
         #value = self.cleaned_data.get('email')

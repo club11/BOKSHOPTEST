@@ -34,10 +34,14 @@
         <form action="{% url 'orders:order_stat_update' %}" method="post" >
           <select class="form-select" aria-label="Default select example" name="order_status">
             <option selected>{{ order.order_status.order_status }}</option>
-            <option value="1">новый</option>
-            <option value="2">принят</option>
-            <option value="3">выполнен</option>
-            <option value="4">отменен</option>
+              {% for object in user.groups.all %}
+              {% if object.name == 'staff' %}
+                <option value="1">новый</option>
+                <option value="2">принят</option>
+                <option value="3">выполнен</option>
+              {% endif %} 
+              {% endfor %}
+                <option value="4">отменен</option>
           </select>
           {% csrf_token %}
           <button type="submit" class="btn btn-sm btn-danger" name="order" value="{{ object.pk }}">Изменить статус</button>

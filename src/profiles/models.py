@@ -22,4 +22,4 @@ class Profile(models.Model):
     country = models.CharField(verbose_name='страна', max_length=20, null=True)
     city = models.CharField(verbose_name='город', max_length=20, null=True)
     index = models.IntegerField(verbose_name='индекс', null=True)
-    adress = models.IntegerField(verbose_name='адрес', null=True)
+    adress = models.CharField(verbose_name='адрес', max_length=30, null=True)

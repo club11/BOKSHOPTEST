@@ -101,7 +101,6 @@ class ListOrderView(LoginRequiredMixin,ListView):
     def get_queryset(self):                                 # поиск по заказчику
         queryset = super().get_queryset()
         q = self.request.GET.get('q')
-        print(q, 'XXXXXXXXX')
         if q:
             queryset = queryset.filter(Q(contact_info__icontains=q))     
         return queryset  
@@ -111,7 +110,6 @@ class ListOrderView(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['search_request'] = q
         return context 
-
 
     def render_to_response(self, context, **response_kwargs):
         response = super().render_to_response(context, **response_kwargs)
@@ -130,7 +128,7 @@ class OrderDetailView(LoginRequiredMixin,DetailView):
     #success_url = reverse_lazy('orders:list_order')
 
 class OrderStatusUpdateView(View):
-    #def post(self, request, pk):
+
     def post(self, request, **kwargs):
         order_status_pk = self.request.POST.get('order_status')
         obj_pk = self.request.POST.get('order')
@@ -138,7 +136,7 @@ class OrderStatusUpdateView(View):
         order_status_values_list = models.OrderStatus.objects.values_list()
         order_status_num = order_status_values_list.count()                                   #проверка на наличие зарегестрированного пользователя путем наличия имени пользователя в заказ
         if order_status_pk.isalpha() is True:
-            return HttpResponseRedirect(reverse_lazy('orders:list_order'))
+            return HttpResponseRedirect(reverse_lazy('orders:detail_order', args = [obj_pk]))
         else:            
             order_status_current_pk_position = int(order_status_pk)
             if order_status_current_pk_position in range(order_status_num + 1):
@@ -165,12 +163,17 @@ class OrderStatusUpdateView(View):
                         [user_email],                       # получатель
                         fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
                     )
-                    print(user_email, 'SSSSSSSSSSSSSSSSSSSSSSSSS')
                     messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email}')
+            user = self.request.user
+            users_groups = user.groups.filter(name__contains='staff')  
+            if users_groups:
                 return HttpResponseRedirect(reverse_lazy('orders:list_order'))
+            else:
+                return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
+            
 class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order
-    template_name = 'orders/list_order.html'
+    template_name = 'orders/my_list_order.html'
     paginate_by = 30
     login_url = reverse_lazy('profiles:login')
 
@@ -181,19 +184,3 @@ class MyListOrderView(LoginRequiredMixin,ListView):
         queryset = order
         return queryset
 
-#class UserListOrderView(LoginRequiredMixin,ListView):
-#    model = models.Order
-#    template_name = 'orders/list_order.html'
-#    paginate_by = 30
-#    login_url = reverse_lazy('profiles:login')
-#
-#    def get_queryset(self):
-#        queryset = super().get_queryset()
-#        get_adress = self.request.get_full_path_info()
-#        user_id_str = get_adress.split('/')
-#        for i in user_id_str:
-#            if i.isdigit():
-#                user_id = int(i)
-#                profile = models.Profile.objects.get(pk=3)
-#                print(profile.user)
-#        return queryset

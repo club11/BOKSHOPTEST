@@ -6,7 +6,6 @@ from django.db import models
 from carts import models as carts_models
 from profiles import models as profiles_models
 
-
 class OrderStatus(models.Model):
     order_status = models.CharField(
         verbose_name='статус заказа',
@@ -53,4 +52,3 @@ class Order(models.Model):
         verbose_name='email', 
         null=True
     )
-
