@@ -26,7 +26,11 @@
         <th scope="row">{{ forloop.counter }}</th>
         <td><a href="{% url 'books:book' book.pk %}">{{ book.book_name }}</a></td>
         <td><a href="{% url 'books:book_update' book.pk %}">Update</a></td>
-        <td><a href="{% url 'books:book_delete' book.pk %}">Delete</a></td>
+          {% if book in book_not_in_cart  %}
+          <td><a href="{% url 'books:book_delete' book.pk %}">Delete</a></td>
+          {% else %}
+          <td>Delete</td>
+          {% endif %}
       </tr>
         {% endfor %}
         <a href="{% url 'books:book_create' %}" class="btn btn-light">Создать книгу</a>

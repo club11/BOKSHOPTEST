@@ -1,3 +1,4 @@
+from itertools import count
 from pyexpat import model
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -9,8 +10,7 @@ from . import forms
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView, FormView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
+from carts import models as cart_models
 
 class HomeTemplateView(ListView):
     model = models.Book
@@ -83,6 +83,28 @@ class BookListView(LoginRequiredMixin,ListView):
         q = self.request.GET.get('q')
         context = super().get_context_data(**kwargs)
         context['search_request'] = q
+
+        #################################################################
+        # Выборка книг для удаления в случае если не внесены в заказ:
+
+        #carts_with_books_list = models.Book.objects.prefetch_related('books_in_cart')
+        #carts_with_books_list = cart_models.BookInCart.objects.select_related('book')
+        #books_not_in_cart.difference(all_books, carts_with_books_list)
+        all_books = models.Book.objects.all()
+        list_of_books = []
+        for i in all_books:                             
+            list_of_books.append(i.id)  # список всех книг
+        books_in_cart = cart_models.BookInCart.objects.all()
+        list_of_books_in_cart = []
+        for i in books_in_cart:
+            list_of_books_in_cart.append(i.book.id)
+        set_of_of_books_in_cart = list(set(list_of_books_in_cart))      # список всех книг в заказах
+        books_still_not_in_cart = []
+        for i in list_of_books:
+            if i not in set_of_of_books_in_cart:
+                books_still_not_in_cart.append(i)           
+        book_not_in_cart = models.Book.objects.filter(id__in=books_still_not_in_cart) # список всех книг не в заказах
+        context ['book_not_in_cart'] = book_not_in_cart
         return context 
     
 
