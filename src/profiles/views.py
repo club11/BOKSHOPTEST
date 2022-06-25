@@ -52,8 +52,8 @@ class RegisterFormView(FormView):
         'Can view profile',
         'Can view author']
         )
-    customer_group = Group.objects.get(name='test_group')                #добавить зарегестрированного пользователя в ГРУППУ кастомеры
-    customer_group.permissions.set(permission)
+    ##############customer_group = Group.objects.get(name='test_group')                #добавить зарегестрированного пользователя в ГРУППУ кастомеры
+    ##############customer_group.permissions.set(permission)
 
     def form_valid(self, form):                         #создаем юзера и профиль в БД
         username = form.cleaned_data.get('username')
@@ -63,7 +63,7 @@ class RegisterFormView(FormView):
         profile = Profile.objects.create(user=user, tel=tel)
         login(self.request, user)                       #логиним юзера
 
-        user.groups.add(self.customer_group)                                     #добавить зарегестрированного пользователя в ГРУППУ кастомеры
+        ######user.groups.add(self.customer_group)                                     #добавить зарегестрированного пользователя в ГРУППУ кастомеры
         #user.user_permissions.set(self.permission)                              #ТЕРМИТЫ
         #print(user.groups.all(), user.user_permissions.all(), 'IIIIIIIIIII', user.get_group_permissions(), 'IIIII')          
         return super().form_valid(form)
