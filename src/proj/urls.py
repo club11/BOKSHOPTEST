@@ -25,7 +25,7 @@ import carts # для картинок в dev режиме
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('directory/', include('directories.urls', namespace='directories')),               #включаем модуль 'directories.urls' gпод неймингом/пространством имен 'directories'. иерархия urls путем Inclde
-    path('book/', include('books.urls', namespace='books')),
+    path('', include('books.urls', namespace='books')),
     path('cart/', include('carts.urls', namespace='carts')), 
     path('order/', include('orders.urls', namespace='orders')), 
     path('profiles/', include('profiles.urls', namespace='profiles')), 
