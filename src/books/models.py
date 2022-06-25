@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from directories.models import Author, Serie, Genre ,Editor
 
+
 # Create your models here.
 class Book(models.Model):
     book_name = models.CharField(
@@ -22,7 +23,7 @@ class Book(models.Model):
     price = models.DecimalField(
         verbose_name='цена',
         max_digits=10,
-        decimal_places=2
+        decimal_places=2,
     )
     currency_price = models.CharField(
         verbose_name='валюта',
