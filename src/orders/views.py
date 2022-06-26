@@ -10,6 +10,8 @@ from django.shortcuts import render
 from requests import request
 import books
 from books import models
+from profiles import models as profile_models
+import carts
 from carts.models import Cart, User
 from . import models, forms
 from . models import Order, carts_models, profiles_models
@@ -76,7 +78,10 @@ class CreateOrderView(FormView):
             user = self.request.user                                                #
             user_email_profile = profiles_models.Profile.objects.get(user=user)     # получаем адрес почты для уведомления
             user_email = user_email_profile.email                                   #
-            messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку. Уведомление о подтверждении будет направлено на Ваш почтовый адресс {user_email}')            # отправляем сообщение пользователю
+            if user_email:
+                messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку. Уведомление о подтверждении будет направлено на Ваш почтовый адресс {user_email}')            # отправляем сообщение пользователю
+            else:
+                messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку.')
         else:
             tel = form.cleaned_data.get('tel')
             messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку. Для уточнения заказа с Вами свяжется наш менеджер по указанному телефону {tel}')
@@ -146,7 +151,13 @@ class OrderStatusUpdateView(View):
                 new_order_status = models.OrderStatus.objects.get(pk=int(order_status_pk))      
                 obj.order_status = new_order_status
                 obj.save()
-                email = models.Order.objects.get(pk=obj_pk).email_adress        #получаем почту от зарегенного пользователя
+
+                #email = models.Order.objects.get(pk=obj_pk).email_adress        #получаем почту от зарегенного пользователя
+                user_order_name = obj.contact_info
+                user_order = User.objects.get(username=user_order_name)
+                user_email_profile = profiles_models.Profile.objects.get(user=user_order)  
+                email = user_email_profile.email
+
                 if new_order_status.order_status == 'принят' and email is not None: # если статус заказа изменяется на ПРИНЯТ и есть почтовый адрес то отправить сообщение в почту
                     order = models.Order.objects.get(pk=obj_pk)
                     books_in_cart = order.cart.cart.all()               ##### # отправляем сообщение пользователю на почту (подготовка перечня названий книг)
@@ -156,17 +167,14 @@ class OrderStatusUpdateView(View):
                         book_names.append(names)    
                     book_names_str = ''.join(book_names)
                     order_adress = self.request.get_full_path_info()
-                    user = self.request.user
-                    user_email_profile = profiles_models.Profile.objects.get(user=user)
-                    user_email = user_email_profile.email
                     send_mail(      
                         book_names_str,                     # строка от сабжэкт
                         order_adress,                       # строка суть письма - в данном случае адресс на заказ (ДОРАБОТАТЬ ФУЛЛ путь)
                         'club11bookshop@mail.ru',           # отправитель
-                        [user_email],                       # получатель
+                        [user_email_profile.email],                       # получатель
                         fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
                     )
-                    messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email}')
+                    messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email_profile.email}')
             user = self.request.user
             users_groups = user.groups.filter(name__contains='staff')  
             if users_groups:

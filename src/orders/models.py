@@ -52,3 +52,4 @@ class Order(models.Model):
         verbose_name='email', 
         null=True
     )
+
