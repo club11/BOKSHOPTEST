@@ -38,7 +38,8 @@ class Book(models.Model):
     serie = models.ForeignKey(
         Serie,
          on_delete=models.PROTECT,
-         related_name='book_series'
+         related_name='book_series',
+         blank=True,
     )
     genre = models.ForeignKey(
         Genre,
