@@ -1,6 +1,6 @@
 
-from asyncio.windows_events import NULL
-from asyncio.unix_events import NULL
+#from asyncio.windows_events import NULL
+
 from audioop import reverse
 from contextlib import nullcontext
 import email
@@ -39,7 +39,8 @@ class CreateOrderView(FormView):
             pk=cart_id,                                       # поле по которому производится поиск
             defaults={},
         )
-        if cart.cart_total_price() is NULL:                                                                                             #ЕСЛИ ЗАКАЗ ПУСТОЙ
+        #if cart.cart_total_price() is NULL:  
+        if cart.cart_total_price() == 0 or cart.cart_total_price() < 0:                                                                                            #ЕСЛИ ЗАКАЗ ПУСТОЙ
             messages.add_message(self.request, messages.INFO, 'Ваша корзина пуста')            # отправляем сообщение пользователю
             return HttpResponseRedirect(reverse_lazy('orders:create_order'))                                                            #ЕСЛИ ЗАКАЗ ПУСТОЙ  
         if created:
