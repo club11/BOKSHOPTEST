@@ -1,5 +1,6 @@
 
 from asyncio.windows_events import NULL
+from asyncio.unix_events import NULL
 from audioop import reverse
 from contextlib import nullcontext
 import email
