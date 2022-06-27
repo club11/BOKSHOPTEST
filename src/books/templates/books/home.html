@@ -19,7 +19,11 @@
             Кол-во страниц: <b>{{ object.pages }}</b></br>
             Формат: {{ object.format }}</br>
             Количество в наличии: {{ object.value_available }}</br>
-            Доступен для заказа: <b>{{ object.available }}</b></br>
+            Доступен для заказа: <b>{% if object.available is True %}
+                                      Да
+                                    {% else %}
+                                      Нет
+                                    {% endif %}</b></br>
             Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
             <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
         </p>
@@ -49,7 +53,11 @@
             Кол-во страниц: <b>{{ object.pages }}</b></br>
             Формат: {{ object.format }}</br>
             Количество в наличии: {{ object.value_available }}</br>
-            Доступен для заказа: <b>{{ object.available }}</b></br>
+            Доступен для заказа: <b>{% if object.available is True %}
+                  Да
+                  {% else %}
+                  Нет
+                  {% endif %}</b></br>
             Рейтинг: <b style="color:#ff2600">{{ object.rating }}</b></br>
             <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
         </p>

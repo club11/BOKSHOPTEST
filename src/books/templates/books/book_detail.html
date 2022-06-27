@@ -3,12 +3,10 @@
 {% block title %} Book detail {% endblock title %}
 {% block body %}
 <div class="card text-white bg-dark w-75 p-3">
-  
     <div class="card-horizontal">
         <div class="img-square-wrapper">
           <img src='{{ object.picture.url }}' class="card-img-top w-100 p-2" alt="...">
         </div>
-
       <div class="card-body">
         <h5 class="card-title" style="color:#f00000"> <b>{{ object.book_name }}</b></h5> 
         <p class="card-text"> 
@@ -32,19 +30,19 @@
           Рейтинг: <b>{{ object.rating }}</b></br>
           <b>Цена: {{ object.price }} {{ object.currency_price }}</b> </br>
           <br>
-          Дата внесения в каталог: {{ object.publication_date }}</br>
-          Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>   
+              {% if user.groups.all.0.name %}
+                Дата внесения в каталог: {{ object.publication_date }}</br>
+                Дата последнего изменения карточки: {{ object.publication_edit_date }}</br>    
+              {% endif %}
       </p>
         <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light">Назад</a>
       </div>
     </div>
   </div>
-
-
-{% show_comments %}
-
+{% if user.is_authenticated is True %} 
+  {% show_comments %}
+{% endif %}
 {% endblock body %}
-
 
 
 

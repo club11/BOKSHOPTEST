@@ -1,21 +1,22 @@
 <h3>Комментарии:</h3>
-
-<form action="{% url 'comments:create_comment' %}" method="post">
-    <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Текст для комментария</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="comment_text"></textarea>
-        <input type="hidden" name="next_step" value="{{ next_step }}">
-        <input type="hidden" name="content_type_id" value="{{ content_type_id }}">
-        <input type="hidden" name="object_id" value="{{ object_id }}">
-    </div>
-      {% csrf_token %}
-      <button type="submit" class="btn btn-success">Оставить комментарий</button>
-
-
-    {% for comment in comments %}
-    <li><b> от {{ comment.author }}:</b> {{ comment.comment_text }}  || {{ comment.created }} </li>
-    {% endfor %}
-</form>
+  <form action="{% url 'comments:create_comment' %}" method="post">
+      <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">Текст для комментария</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="comment_text"></textarea>
+          <input type="hidden" name="next_step" value="{{ next_step }}">
+          <input type="hidden" name="content_type_id" value="{{ content_type_id }}">
+          <input type="hidden" name="object_id" value="{{ object_id }}">
+      </div>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Оставить комментарий</button>
+  </form>
+  {% for comment in comments %}
+  <li><b> от {{ comment.author }}:</b> {{ comment.comment_text }}  || {{ comment.created }} </li>
+  {% endfor %}
+ 
 
 {# {% for comment in comments %} #}
 {# <li><b> by {{ comment.author }}:</b> {{ comment.comment_text }}  || {{ comment.created }} </li> #}
+
+
+ 
