@@ -46,7 +46,6 @@ class GoodInCartDeleteView(RedirectView):
     success_url = reverse_lazy('carts:cart')
 
     def get_redirect_url(self, *args, **kwargs):
-        print(self.kwargs)                                          #!!!!! такой вот способ!!
         self.model.objects.get(pk=self.kwargs.get('pk')).delete()     # удаляем объект = книгу заказа из корзины
         return self.success_url                                       # новый способ редиректа!!!!
 

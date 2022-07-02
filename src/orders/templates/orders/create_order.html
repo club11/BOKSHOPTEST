@@ -25,7 +25,9 @@
           </div>
         </td>
         <td>{{ good.total_price }}</td>
-        <td><form action="{% url 'carts:delete_good_in_cart' good.pk %}" method="post" >{% csrf_token %}<button type="submit" class="btn btn-sm btn-danger">Удалить</button></form></td>
+    
+        <td><a href="{% url 'carts:delete_good_in_cart' good.pk %}" method="get" class="btn btn-sm btn-danger">Удалить</a></td>
+        
       </tr>
     {% endfor %}
     <tr>
@@ -33,7 +35,6 @@
         <th>Total score: {{ object.cart_total_price }}</th>
         <th></th>
     </tr>
-
     </tbody>
   </table>
   <button type="submit" bbt class="btn btn-warning" name="submit" value="save_cart">Сохранить корзину</button>
@@ -46,3 +47,6 @@
 {# {{ form|crispy }} #}
 </form>
 {% endblock body %}
+
+
+<td><form action="{% url 'carts:delete_good_in_cart' good.pk %}" method="post">{% csrf_token %}<button type="submit" class="btn btn-sm btn-danger">Удалить</button></form></td>

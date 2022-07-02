@@ -228,8 +228,7 @@ class OrderStatusUpdateView(View):
             return HttpResponseRedirect(reverse_lazy('orders:list_order'))
         else:
             return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
-
-            
+   
 class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order
     template_name = 'orders/my_list_order.html'
