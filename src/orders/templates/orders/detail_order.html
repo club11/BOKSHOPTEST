@@ -33,18 +33,26 @@
       <th>   
         <form action="{% url 'orders:order_stat_update' %}" method="post" >
           <select class="form-select" aria-label="Default select example" name="order_status">
-            <option selected>{{ order.order_status.order_status }}</option>
-              {% for object in user.groups.all %}
-              {% if object.name == 'staff' %}
-                <option value="1">новый</option>
-                <option value="2">принят</option>
-                <option value="3">выполнен</option>
-              {% endif %} 
-              {% endfor %}
+            {% if denied == 4 %}
+
+               {% else %}
+               <option selected>{{ order.order_status.order_status }}</option>
+                 {% for object in user.groups.all %}
+                  {% if object.name == 'staff' %}
+                    <option value="1">новый</option>
+                    <option value="2">принят</option>
+                    <option value="3">выполнен</option>
+                  {% endif %} 
+                 {% endfor %}
+            {% endif %}
                 <option value="4">отменен</option>
           </select>
           {% csrf_token %}
+          {% if denied == 4 %}
+          <button type="button" disabled ></button>          
+          {% else %}
           <button type="submit" class="btn btn-sm btn-danger" name="order" value="{{ object.pk }}">Изменить статус</button>
+          {% endif %}
         </form>
 
       </th>  

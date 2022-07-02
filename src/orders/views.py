@@ -30,7 +30,7 @@ class CreateOrderView(FormView):
 
     def get_initial(self):                      # подкидывем доп данные в заказ(телефон и прочее из данных ппользователя)
         if self.request.user.is_anonymous:
-            return {'contact_info': ' ', 'tel':' '}
+            return {'contact_info': '', 'tel':' '}
         username = self.request.user.get_username()
         tel = self.request.user.profile.tel
         return {'contact_info': username, 'tel':tel}
@@ -86,6 +86,22 @@ class CreateOrderView(FormView):
             tel = form.cleaned_data.get('tel')
             messages.add_message(self.request, messages.INFO, f'{str(self.request.user)} , Ваш заказ {book_names_str} принят в обработку. Для уточнения заказа с Вами свяжется наш менеджер по указанному телефону {tel}')
         #return HttpResponseRedirect(reverse_lazy('books:book_goods_list'))
+
+        #####################################
+        ## убираем количество доступных для заказа книг в случае создания заказа
+        delete_book_quantity_list =[]                       # получаем список количество книг для уменьшения
+        book_in_cart_list =[]
+        for i in books_in_cart:
+            delete_book_quantity_list.append(i.quantity)
+            book_in_cart_list.append(i.book)
+        for b in book_in_cart_list:
+            n = 0
+            b.value_available -= delete_book_quantity_list[n]
+            n += 1
+            b.is_available_validator()
+            b.save()
+        #####################################
+
         if self.request.user.is_anonymous:
             return HttpResponseRedirect(reverse_lazy('books:book_goods_list'))
         else:
@@ -135,6 +151,13 @@ class OrderDetailView(LoginRequiredMixin,DetailView):
     template_name = 'orders/detail_order.html'
     #success_url = reverse_lazy('orders:list_order')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_stat_current = self.get_object().order_status.pk
+        if order_stat_current == 4:
+            context['denied'] = order_stat_current
+        return context
+
 class OrderStatusUpdateView(View):
 
     def post(self, request, **kwargs):
@@ -153,34 +176,59 @@ class OrderStatusUpdateView(View):
                 obj.save()
 
                 #email = models.Order.objects.get(pk=obj_pk).email_adress        #получаем почту от зарегенного пользователя
-                user_order_name = obj.contact_info
-                user_order = User.objects.get(username=user_order_name)
-                user_email_profile = profiles_models.Profile.objects.get(user=user_order)  
-                email = user_email_profile.email
+                email = ''
+                if obj.contact_info != '':
+                    user_order_name = obj.contact_info
+                    user_order = User.objects.get(username=user_order_name)
+                    user_email_profile = profiles_models.Profile.objects.get(user=user_order)  
+                    email = user_email_profile.email
 
-                if new_order_status.order_status == 'принят' and email is not None: # если статус заказа изменяется на ПРИНЯТ и есть почтовый адрес то отправить сообщение в почту
+                    if new_order_status.order_status == 'принят': # если статус заказа изменяется на ПРИНЯТ и есть почтовый адрес то отправить сообщение в почту
+                    #if new_order_status.order_status == 'принят' and email is not None: # если статус заказа изменяется на ПРИНЯТ и есть почтовый адрес то отправить сообщение в почту
+                        order = models.Order.objects.get(pk=obj_pk)
+                        books_in_cart = order.cart.cart.all()               ##### # отправляем сообщение пользователю на почту (подготовка перечня названий книг)
+                        book_names = ['Ваш заказ принят:']
+                        for n in range(0, books_in_cart.count()):
+                            names = books_in_cart[n].book.book_name
+                            book_names.append(names)    
+                        book_names_str = ''.join(book_names)
+                        order_adress = self.request.get_full_path_info()
+                        send_mail(      
+                            book_names_str,                     # строка от сабжэкт
+                            order_adress,                       # строка суть письма - в данном случае адресс на заказ (ДОРАБОТАТЬ ФУЛЛ путь)
+                            'club11bookshop@mail.ru',           # отправитель
+                            [user_email_profile.email],                       # получатель
+                            fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
+                        )
+                        messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email_profile.email}')
+                if new_order_status.order_status == 'отменен':
+                    print('PIzdec')
+                    #####################################
+                    ## убираем количество доступных для заказа книг в случае создания заказа
+                    delete_book_quantity_list =[]                       # получаем список количество книг для уменьшения
+                    book_in_cart_list =[]
                     order = models.Order.objects.get(pk=obj_pk)
-                    books_in_cart = order.cart.cart.all()               ##### # отправляем сообщение пользователю на почту (подготовка перечня названий книг)
-                    book_names = ['Ваш заказ принят:']
-                    for n in range(0, books_in_cart.count()):
-                        names = books_in_cart[n].book.book_name
-                        book_names.append(names)    
-                    book_names_str = ''.join(book_names)
-                    order_adress = self.request.get_full_path_info()
-                    send_mail(      
-                        book_names_str,                     # строка от сабжэкт
-                        order_adress,                       # строка суть письма - в данном случае адресс на заказ (ДОРАБОТАТЬ ФУЛЛ путь)
-                        'club11bookshop@mail.ru',           # отправитель
-                        [user_email_profile.email],                       # получатель
-                        fail_silently=True,             #в FALSE указывает об ошибке неотправленного письма для девеломпента / в боевом серваке статус TRue
-                    )
-                    messages.add_message(self.request, messages.SUCCESS, f'Уведомление об изменении статуса заказа на "принят" направлено на почтовый адресс {user_email_profile.email}')
-            user = self.request.user
-            users_groups = user.groups.filter(name__contains='staff')  
-            if users_groups:
-                return HttpResponseRedirect(reverse_lazy('orders:list_order'))
-            else:
-                return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
+                    books_in_cart = order.cart.cart.all() 
+                    for i in books_in_cart:
+                        book_in_cart_list.append(i.book)
+                    print(book_in_cart_list)
+                    for i in books_in_cart:
+                        delete_book_quantity_list.append(i.quantity)
+                    print(delete_book_quantity_list)                    
+                    for b in book_in_cart_list:
+                        n = 0
+                        b.value_available += delete_book_quantity_list[n]
+                        n += 1
+                        b.is_available_validator()
+                        b.save()
+                    #####################################
+        user = self.request.user
+        users_groups = user.groups.filter(name__contains='staff')  
+        if users_groups:
+            return HttpResponseRedirect(reverse_lazy('orders:list_order'))
+        else:
+            return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
+
             
 class MyListOrderView(LoginRequiredMixin,ListView):
     model = models.Order

@@ -41,8 +41,6 @@ class CartView(DetailView):
                 book_in_cart.unit_price = book.price
             book_in_cart.save()
         return cart
-
-
 class GoodInCartDeleteView(RedirectView):
     model = models.BookInCart
     success_url = reverse_lazy('carts:cart')

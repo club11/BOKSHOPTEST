@@ -21,7 +21,7 @@
         <td>{{ good.book.book_name }}</td>
         <td>
           <div class="sm-0">
-            <input type="number" min="1" step="1" class="form-control" name="quantityforgood_{{ good.pk }}" value="{{ good.quantity }}" >
+            <input type="number" min="1" max="{{ good.book.value_available }}" step="1" class="form-control" name="quantityforgood_{{ good.pk }}" value="{{ good.quantity }}" >
           </div>
         </td>
         <td>{{ good.total_price }}</td>

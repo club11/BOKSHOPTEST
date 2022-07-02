@@ -7,9 +7,13 @@ from django.db import models
 from django.urls import reverse
 
 from directories.models import Author, Serie, Genre ,Editor
-
+from carts.models import BookInCart
+from django.core.validators import MinValueValidator
 
 # Create your models here.
+
+
+
 class Book(models.Model):
     book_name = models.CharField(
         verbose_name='название книги',
@@ -88,10 +92,11 @@ class Book(models.Model):
     value_available = models.IntegerField(
         verbose_name='количество в наличии',
         blank=True,
+        validators=[MinValueValidator(0)]
     )
     available = models.BooleanField(
         verbose_name='доступен для заказа',
-        default=True,
+        default=True
     )
     publication_date = models.DateTimeField(
         verbose_name='Дата внесения в каталог',
@@ -104,9 +109,15 @@ class Book(models.Model):
         auto_now_add=False
     ) 
 
-
     def get_absolute_url(self):
         return reverse('books:book', args = [self.pk])
+
+    def is_available_validator(self):
+        if self.value_available < 1:
+            self.available = False
+        else:
+            self.available = True
+        return self.available
 
 ########################################################################################
 #доработать рейтинг

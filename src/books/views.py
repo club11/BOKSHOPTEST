@@ -46,6 +46,7 @@ class BookDetailView(DetailView):
     model = models.Book
     template = 'book_detail.html'
 
+
     #def get_context_data(self, **kwargs):
     #    context =  super().get_context_data(**kwargs)
     #    context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
@@ -67,6 +68,14 @@ class BookUpdateView(LoginRequiredMixin,UpdateView):
     template_name = 'books/book_update.html'
     success_url = reverse_lazy('books:book_list')
     login_url = reverse_lazy('profiles:login')
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            book = self.get_queryset().get(pk=pk)
+            book.is_available_validator()
+            book.save()
+        return super().get_object(queryset)
 
 class BookListView(LoginRequiredMixin,ListView):
     model = models.Book

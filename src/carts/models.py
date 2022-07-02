@@ -1,10 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from books import models as books_models
+from django.core.validators import MaxValueValidator
 
 User = get_user_model()
-
-
 class Cart(models.Model):
     customer = models.ForeignKey(
         User,
@@ -35,9 +34,14 @@ class BookInCart(models.Model):
         related_name='books_in_cart',
         on_delete=models.PROTECT,
     )
+    def max_quantity(self):                                                         #########
+        max_quantity = self.book.value_available                                    #########
+        return max_quantity                                                         #########
+
     quantity = models.IntegerField(
         verbose_name='количество',
         default=1,
+        validators=[MaxValueValidator(max_quantity)]                                #########
     )
     unit_price = models.DecimalField(
         verbose_name='цена',      
@@ -45,8 +49,9 @@ class BookInCart(models.Model):
         decimal_places=2,
     )
 
-
     #@property                    # чтоб обращаться как к свойству а не как к методу
     def total_price(self):
         total_price = self.quantity * self.unit_price
         return total_price
+
+
