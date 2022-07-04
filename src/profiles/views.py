@@ -30,8 +30,8 @@ class UserLoginView(LoginView):
         users_groups = user.groups.filter(name__contains='staff')
 
         staff_group, created = Group.objects.get_or_create(name = 'staff')
-        staff_group_add_perm = Permission.objects.get(name='Can add serie')
-        staff_group.permissions.add(staff_group_add_perm)
+        #staff_group_add_perm = Permission.objects.get(name='Can add serie')
+        #staff_group.permissions.add(staff_group_add_perm)
         print(user.get_group_permissions())
         if users_groups.count() > 0:
             staff_group = user.groups.get(name = 'staff')
