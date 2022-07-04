@@ -20,7 +20,7 @@ import string
 import random
 from django.contrib import messages
 from validators.validators import  ValidationError
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 class UserLoginView(LoginView):
     template_name = 'profiles/login.html'
     next_page = next
@@ -28,6 +28,11 @@ class UserLoginView(LoginView):
     def get_success_url(self):                                                  # перенаправить юзера staff на иную страницу
         user = self.request.user
         users_groups = user.groups.filter(name__contains='staff')
+
+        staff_group, created = Group.objects.get_or_create(name = 'staff')
+        staff_group_add_perm = Permission.objects.get(name='Can add serie')
+        staff_group.permissions.add(staff_group_add_perm)
+        print(user.get_group_permissions())
         if users_groups.count() > 0:
             staff_group = user.groups.get(name = 'staff')
             if staff_group.name == 'staff':
@@ -123,11 +128,11 @@ class UpdateRegisterView(FormView):
         #profile = Profile.objects.update(tel=tel, email=email, first_name=first_name, last_name=last_name, country=country, city=city, index=index, adress=adress)
         return super().form_valid(form)
 
-class UserPasswordChangeView(PasswordChangeView):
+class UserPasswordChangeView(LoginRequiredMixin,PasswordChangeView):
     template_name = 'profiles/password_change_form.html'
     success_url = reverse_lazy('profiles:profile_user')
 
-class UserDataDetaiView(DetailView):
+class UserDataDetaiView(LoginRequiredMixin, DetailView):
     model = models.Profile
     template_name = 'profiles/profile_data.html'
 

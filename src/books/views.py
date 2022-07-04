@@ -9,7 +9,7 @@ from . import models
 from . import forms
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView, FormView, TemplateView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from carts import models as cart_models
 
 class HomeTemplateView(ListView):
@@ -52,22 +52,24 @@ class BookDetailView(DetailView):
     #    context['star_form'] = forms.RatingForm()       # нетипичный способ внесения значения формы в контекст. возможно лучше сперва через cleaned data...
     #    return context
 
-class BookCreateView(LoginRequiredMixin,CreateView):
+class BookCreateView(PermissionRequiredMixin, LoginRequiredMixin,CreateView):
     model = models.Book
     form_class = forms.BookForm
     login_url = reverse_lazy('profiles:login')
-
-class BookDeleteView(LoginRequiredMixin,DeleteView):
+    permission_required = ('directories.view_author', )
+class BookDeleteView(PermissionRequiredMixin, LoginRequiredMixin,DeleteView):
     model = models.Book
     success_url = reverse_lazy('books:book_list')
     login_url = reverse_lazy('profiles:login')
+    permission_required = ('directories.view_author', )
 
-class BookUpdateView(LoginRequiredMixin,UpdateView):
+class BookUpdateView(PermissionRequiredMixin, LoginRequiredMixin,UpdateView):
     model = models.Book
     form_class = forms.BookForm
     template_name = 'books/book_update.html'
     success_url = reverse_lazy('books:book_list')
     login_url = reverse_lazy('profiles:login')
+    permission_required = ('directories.view_author', )
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
@@ -77,9 +79,10 @@ class BookUpdateView(LoginRequiredMixin,UpdateView):
             book.save()
         return super().get_object(queryset)
 
-class BookListView(LoginRequiredMixin,ListView):
+class BookListView(PermissionRequiredMixin, LoginRequiredMixin,ListView):
     model = models.Book
     login_url = reverse_lazy('profiles:login')
+    permission_required = ('directories.view_author', )
 
     def get_queryset(self):                                 # поиск по книгам | авторам
         queryset = super().get_queryset()

@@ -22,6 +22,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class CreateOrderView(FormView):
     form_class = forms.OrderCreateForm
@@ -116,11 +117,12 @@ class CreateOrderView(FormView):
         )       
         context['object'] = cart
         return context 
-class ListOrderView(LoginRequiredMixin,ListView):
+class ListOrderView(PermissionRequiredMixin,LoginRequiredMixin, ListView):
     model = models.Order
     template_name = 'orders/list_order.html'
     paginate_by = 30
     login_url = reverse_lazy('profiles:login')
+    permission_required = 'orders.view_order'
 
     def get_queryset(self):                                 # поиск по заказчику
         queryset = super().get_queryset()
@@ -146,7 +148,7 @@ class ListOrderView(LoginRequiredMixin,ListView):
             return HttpResponseRedirect(reverse_lazy('profiles:profile_data', args=[get_user_profile.pk]))
         return response
 
-class OrderDetailView(LoginRequiredMixin,DetailView):
+class OrderDetailView(LoginRequiredMixin, DetailView):
     model = models.Order
     template_name = 'orders/detail_order.html'
     #success_url = reverse_lazy('orders:list_order')
@@ -229,7 +231,7 @@ class OrderStatusUpdateView(View):
         else:
             return HttpResponseRedirect(reverse_lazy('orders:my_list_order'))
    
-class MyListOrderView(LoginRequiredMixin,ListView):
+class MyListOrderView(LoginRequiredMixin, ListView):
     model = models.Order
     template_name = 'orders/my_list_order.html'
     paginate_by = 30

@@ -7,10 +7,12 @@ from . import models
 from books import models as books_models
 from django.views.generic import DetailView, DeleteView, View, RedirectView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class CartView(DetailView):
+class CartView(LoginRequiredMixin,DetailView):
     template_name = 'carts/cart_form.html'
     model = models.Cart
+    login_url = reverse_lazy('profiles:login')
 
     def get_object(self, queryset=None):
         # get cart
@@ -49,7 +51,9 @@ class GoodInCartDeleteView(RedirectView):
         self.model.objects.get(pk=self.kwargs.get('pk')).delete()     # удаляем объект = книгу заказа из корзины
         return self.success_url                                       # новый способ редиректа!!!!
 
-class CartUpdate(View):
+class CartUpdate(LoginRequiredMixin, View):
+    login_url = reverse_lazy('profiles:login')    
+
     def post(self, request):
         action = self.request.POST.get("submit")                 # для сигнала выбор действия охранить корзину иили сохр и заказ
          # get cart

@@ -6,6 +6,7 @@ from books import models as books_models
 from directories import models as directories_models
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin
 """
 для работы с excel
 """
@@ -16,10 +17,11 @@ import sqlite3
 # для работы с xls
 import openpyxl
 
-class ExcelStaffView(FormView):
+class ExcelStaffView(PermissionRequiredMixin, FormView):
     template_name = 'staff/excel_import.html'
     form_class = forms.ExcelStaffForm
     #success_url = reverse_lazy('books:home')
+    permission_required = 'directories.add_serie'
 
     def get_initial(self):
         print(super().get_initial())
